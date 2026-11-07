@@ -4,8 +4,7 @@
 
 Esconda CPF, telefone, e-mail, chave Pix e outros dados sensíveis em prints antes de enviar. Feito para dados brasileiros: CPF, CNPJ (inclusive o alfanumérico), RG, chave Pix, placa, CEP, DDD.
 
-<!-- Grave docs/demo.gif e descomente a linha abaixo. -->
-<!-- ![SafeShot](docs/demo.gif) -->
+![SafeShot](docs/demo.gif)
 
 | Claro                                                                | Escuro                                                               |
 | -------------------------------------------------------------------- | -------------------------------------------------------------------- |

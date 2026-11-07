@@ -4,8 +4,7 @@
 
 Hide CPF, phone numbers, e-mail, Pix keys and other sensitive data in screenshots before you share them. Built for Brazilian data: CPF, CNPJ (including the alphanumeric one), RG, Pix key, license plate, CEP, area code.
 
-<!-- Record docs/demo.gif and uncomment the line below. -->
-<!-- ![SafeShot](docs/demo.gif) -->
+![SafeShot](docs/demo.gif)
 
 | Light                                                            | Dark                                                           |
 | ---------------------------------------------------------------- | -------------------------------------------------------------- |
