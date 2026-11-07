@@ -1,57 +1,15 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { PNG } from "pngjs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { detect, type Category, type Detection, type OcrPage } from "../src/core/detect";
-import type { Rgba } from "../src/core/redact";
-import { createTesseractEngine } from "../src/ocr/tesseract";
+import { detect, type OcrPage } from "../src/core/detect";
 import type { OcrEngine } from "../src/ocr/types";
-import { copyOcrAssets } from "../scripts/copy-ocr-assets.mjs";
+import { hit, load, nodeEngine, shots, type Expected } from "./helpers/recall";
 
-const shots = join(__dirname, "fixtures", "shots");
 const names = existsSync(shots)
   ? readdirSync(shots)
       .filter((f) => f.endsWith(".png"))
       .map((f) => f.replace(".png", ""))
   : [];
-
-interface Expected {
-  category: Category;
-  text: string;
-}
-
-const key = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
-
-function similarity(a: string, b: string): number {
-  const rows = Array.from({ length: a.length + 1 }, (_, i) => [
-    i,
-    ...Array<number>(b.length).fill(0),
-  ]);
-  for (let j = 1; j <= b.length; j++) rows[0]![j] = j;
-  for (let i = 1; i <= a.length; i++) {
-    for (let j = 1; j <= b.length; j++) {
-      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-      rows[i]![j] = Math.min(
-        rows[i - 1]![j]! + 1,
-        rows[i]![j - 1]! + 1,
-        rows[i - 1]![j - 1]! + cost,
-      );
-    }
-  }
-  return 1 - rows[a.length]![b.length]! / Math.max(a.length, b.length, 1);
-}
-
-// Tesseract sometimes swaps 0/O in long tokens; a near match still means the right text was boxed.
-const hit = (d: Detection, e: Expected) =>
-  d.category === e.category &&
-  (key(d.text).includes(key(e.text)) ||
-    key(e.text).includes(key(d.text)) ||
-    similarity(key(d.text), key(e.text)) >= 0.9);
-
-function load(name: string): Rgba {
-  const png = PNG.sync.read(readFileSync(join(shots, `${name}.png`)));
-  return { data: new Uint8ClampedArray(png.data), width: png.width, height: png.height };
-}
 
 // Pages read by another engine (the native macOS one writes them with `cargo test dump_pages -- --ignored`).
 const pagesDir = process.env.OCR_PAGES_DIR;
@@ -63,17 +21,7 @@ describe.skipIf(names.length === 0)("OCR recall on generated screens", () => {
   let engine: OcrEngine;
 
   beforeAll(() => {
-    if (pagesDir) return;
-    const target = copyOcrAssets();
-    engine = createTesseractEngine({
-      paths: { langPath: join(target, "lang") },
-      encode: (image) => {
-        const png = new PNG({ width: image.width, height: image.height });
-        png.data = Buffer.from(image.data);
-        return PNG.sync.write(png);
-      },
-      pageSegMode: (process.env.PSM as "3" | "11" | undefined) ?? "11",
-    });
+    if (!pagesDir) engine = nodeEngine();
   }, 60_000);
 
   afterAll(async () => {

@@ -1,5 +1,5 @@
 import { defaultShortcut, type Os } from "./core/os";
-import type { BarColor } from "./core/redact";
+import type { BarColor, RedactStyle } from "./core/redact";
 import type { LangSetting } from "./i18n";
 
 export type ThemeSetting = "system" | "light" | "dark";
@@ -8,6 +8,8 @@ export interface Settings {
   language: LangSetting;
   theme: ThemeSetting;
   barColor: BarColor;
+  // How hidden data looks: a plain bar, a bar that names the data, or a soft smudge.
+  redactStyle: RedactStyle;
   terms: string[];
   // "auto" uses the reader built into the system when there is one, and Tesseract otherwise.
   ocrEngine: "auto" | "tesseract";
@@ -23,6 +25,7 @@ export const defaultSettings: Settings = {
   language: "auto",
   theme: "system",
   barColor: "black",
+  redactStyle: "solid",
   terms: [],
   ocrEngine: "auto",
   shortcut: "",
@@ -38,6 +41,7 @@ export function parseSettings(raw: unknown, os: Os = "windows"): Settings {
   return {
     language: pick(r.language, ["auto", "pt-BR", "en"], defaultSettings.language),
     theme: pick(r.theme, ["system", "light", "dark"], defaultSettings.theme),
+    redactStyle: pick(r.redactStyle, ["solid", "label", "smudge"], defaultSettings.redactStyle),
     barColor: pick(r.barColor, ["black", "white", "gray"], defaultSettings.barColor),
     terms: Array.isArray(r.terms)
       ? r.terms.filter((t): t is string => typeof t === "string").slice(0, 200)

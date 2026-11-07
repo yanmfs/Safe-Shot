@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { detect, type Box, type Category, type Detection, type OcrPage } from "../../core/detect";
 import { advance, startQueue, type Queue } from "../../core/queue";
-import type { Rect } from "../../core/redact";
+import type { Mark as RedactMark } from "../../core/redact";
 import { getOcrEngine } from "../../ocr/engine";
 import { codeDetections, findCodes, loadBundledWasm } from "../../ocr/qr";
 import type { LoadedImage } from "../../platform";
@@ -239,11 +239,18 @@ export const useDoc = create<DocState>((set, get) => {
   };
 });
 
-export function activeRects(detections: Detection[], edit: Edit): Rect[] {
+// What gets hidden, with the name of the data for labelled bars. Hand-drawn areas have no name.
+export function activeMarks(
+  detections: Detection[],
+  edit: Edit,
+  nameOf: (category: Category) => string,
+): RedactMark[] {
   const off = new Set(edit.off);
   return [
-    ...detections.filter((d) => !off.has(d.id)).flatMap((d) => d.boxes),
-    ...edit.words.map((w) => w.box),
-    ...edit.manual.map((m) => m.box),
+    ...detections
+      .filter((d) => !off.has(d.id))
+      .flatMap((d) => d.boxes.map((rect) => ({ rect, label: nameOf(d.category) }))),
+    ...edit.words.map((w) => ({ rect: w.box })),
+    ...edit.manual.map((m) => ({ rect: m.box })),
   ];
 }

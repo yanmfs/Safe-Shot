@@ -2,11 +2,21 @@ import { Maximize, MousePointer2, Redo2, Square, Undo2, ZoomIn, ZoomOut } from "
 import { Button } from "../../components/Button";
 import { Tooltip } from "../../components/Tooltip";
 import { modKeyLabel } from "../../core/os";
-import type { BarColor } from "../../core/redact";
+import type { BarColor, RedactStyle } from "../../core/redact";
 import { platform } from "../../platform";
 import { useApp, useT } from "../../store";
 import { useDoc } from "../doc/store";
 import { useView } from "../viewer/view";
+
+const STYLES: {
+  id: RedactStyle;
+  label: "style.solid" | "style.labelled" | "style.smudge";
+  hint: "style.solid.hint" | "style.labelled.hint" | "style.smudge.hint";
+}[] = [
+  { id: "solid", label: "style.solid", hint: "style.solid.hint" },
+  { id: "label", label: "style.labelled", hint: "style.labelled.hint" },
+  { id: "smudge", label: "style.smudge", hint: "style.smudge.hint" },
+];
 
 const BAR_COLORS: BarColor[] = ["black", "white", "gray"];
 const SWATCH: Record<BarColor, string> = { black: "#000", white: "#fff", gray: "#808080" };
@@ -20,6 +30,7 @@ export function Toolbar() {
   const doc = useDoc((s) => s.doc);
   const zoom = useView((s) => s.zoom);
   const barColor = useApp((s) => s.settings.barColor);
+  const redactStyle = useApp((s) => s.settings.redactStyle);
   const update = useApp((s) => s.update);
   const setDialog = useApp((s) => s.setDialog);
   const { setTool, undo, redo } = useDoc.getState();
@@ -118,6 +129,25 @@ export function Toolbar() {
       </div>
 
       <div className="flex items-center gap-3">
+        <div
+          role="radiogroup"
+          aria-label={t("style.label")}
+          className="flex rounded-control border border-border-strong/70 bg-surface-2 p-0.5"
+        >
+          {STYLES.map((option) => (
+            <Tooltip key={option.id} label={t(option.hint)}>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={redactStyle === option.id}
+                onClick={() => update({ redactStyle: option.id })}
+                className={`h-7 rounded-[5px] px-2.5 text-[13px] font-medium transition-colors ${redactStyle === option.id ? "bg-surface text-text shadow-[0_1px_2px_rgb(0_0_0/0.12)]" : "text-muted hover:text-text"}`}
+              >
+                {t(option.label)}
+              </button>
+            </Tooltip>
+          ))}
+        </div>
         <div role="group" aria-label={t("bar.label")} className="flex items-center gap-1">
           {BAR_COLORS.map((color) => (
             <Tooltip key={color} label={t(`bar.${color}`)}>

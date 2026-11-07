@@ -38,9 +38,10 @@ xattr -cr /Applications/SafeShot.app
 1. Arraste um ou mais prints para a janela, cole com `Ctrl/⌘+V` ou abra arquivos (PNG, JPG, WEBP, BMP, GIF; HEIC no macOS). Também dá para tirar o print para a área de transferência e apertar o atalho global (`Ctrl+Alt+Shift+S` no Windows, `⌃⌥⌘S` no macOS): o SafeShot abre com a imagem e já começa a leitura.
 2. Espere a leitura do texto (alguns segundos). Os dados achados aparecem na imagem e na lista, já marcados para ocultar.
 3. Revise: desmarque o que quiser manter, clique em qualquer palavra para ocultá-la, ou desenhe retângulos com `R`.
-4. Copie com `Ctrl/⌘+C` ou salve com `Ctrl/⌘+S`. O arquivo salvo se chama `<original>-safeshot.png` (ou `.jpg`, se você escolher JPEG nas configurações); o original nunca é alterado.
-5. Confira a imagem antes de enviar. Segurar `Alt` mostra o original para comparar.
-6. Com vários arquivos, o botão "Próxima" passa para a imagem seguinte da fila; cada uma é revisada e exportada separadamente.
+4. Escolha como ocultar na barra: **Tarja** (cor única, o padrão), **Rótulo** (tarja que diz "CPF", "Telefone"…) ou **Borrado** (borrão suave). A prévia na tela é exatamente o que será salvo.
+5. Copie com `Ctrl/⌘+C` ou salve com `Ctrl/⌘+S`. O arquivo salvo se chama `<original>-safeshot.png` (ou `.jpg`, se você escolher JPEG nas configurações); o original nunca é alterado.
+6. Confira a imagem antes de enviar. Segurar `Alt` mostra o original para comparar.
+7. Com vários arquivos, o botão "Próxima" passa para a imagem seguinte da fila; cada uma é revisada e exportada separadamente.
 
 ## O que ele faz e o que não faz
 
@@ -49,7 +50,7 @@ Faz: lê o texto da imagem no seu computador (com o leitor do próprio sistema, 
 Não faz:
 
 - Não garante achar tudo. O OCR erra em letra muito pequena, fundo com ruído ou fonte decorativa, e itens com confiança média aparecem como "Confira". A decisão final é sua.
-- Não tem desfoque nem pixelização, de propósito: os dois podem ser parcialmente revertidos.
+- Não tem desfoque comum nem pixelização, de propósito: os dois espalham os pixels do texto e podem ser parcialmente revertidos. O "Borrado" é outra coisa: guarda só quatro tons por trecho, sem a forma das letras, e o app lê o resultado de novo e troca por tarja sólida o que ainda der para ler. Para um dado muito sensível, a tarja continua sendo a escolha mais segura.
 - Cobre o QR Code inteiro, mas não diz o que ele contém: um QR pode guardar dados como cartão de embarque ou Pix, por isso o item vem marcado para ocultar.
 - No JPEG as tarjas crescem até blocos de 16 pixels, para a compressão não deixar rastro do que está embaixo. Para texto, prefira PNG.
 - Não detecta rostos nem informações que não estão em texto.
