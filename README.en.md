@@ -14,6 +14,12 @@ Hide CPF, phone numbers, e-mail, Pix keys and other sensitive data in screenshot
 | ---------------------------------------------------------------- | -------------------------------------------------------------- |
 | ![SafeShot window, light theme](docs/shots/macos-light-main.png) | ![SafeShot window, dark theme](docs/shots/macos-dark-main.png) |
 
+## How it works
+
+<p align="center">
+  <img src="docs/how-it-works.svg" alt="SafeShot finds CPF, Pix and phone numbers, covers each one the way you choose and shows a preview equal to the saved file." width="100%">
+</p>
+
 ## Highlights
 
 - **Finds it for you:** CPF, CNPJ, phone numbers, e-mail, Pix keys, cards, plates, CEP, QR codes and more, reading the image on your computer.

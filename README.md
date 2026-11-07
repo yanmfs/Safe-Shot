@@ -14,6 +14,12 @@ Esconda CPF, telefone, e-mail, chave Pix e outros dados sensíveis em prints ant
 | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | ![Janela do SafeShot no tema claro](docs/shots/macos-light-main.png) | ![Janela do SafeShot no tema escuro](docs/shots/macos-dark-main.png) |
 
+## Como funciona
+
+<p align="center">
+  <img src="docs/how-it-works.svg" alt="O SafeShot acha CPF, Pix e telefone, cobre cada dado do jeito que você escolher e mostra uma prévia igual ao arquivo salvo." width="100%">
+</p>
+
 ## Destaques
 
 - **Acha sozinho** CPF, CNPJ, telefone, e-mail, Pix, cartão, placa, CEP, QR Code e mais, lendo a imagem no seu computador.
