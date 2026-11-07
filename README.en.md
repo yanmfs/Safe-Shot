@@ -1,6 +1,10 @@
-# SafeShot
+<p align="center">
+  <img src="docs/banner.en.png" alt="SafeShot" width="100%">
+</p>
 
-[Português](README.md)
+<p align="center"><a href="README.md">Português</a> · <a href="../../releases">Download</a> · <a href="CONTRIBUTING.md">Contributing</a></p>
+
+<p align="center"><img alt="license MIT" src="https://img.shields.io/badge/license-MIT-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="platform Windows | macOS" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="100% offline" src="https://img.shields.io/badge/100%25-offline-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="built with Tauri 2" src="https://img.shields.io/badge/built%20with-Tauri%202-d19a00?style=flat-square&labelColor=1b1f27"></p>
 
 Hide CPF, phone numbers, e-mail, Pix keys and other sensitive data in screenshots before you share them. Built for Brazilian data: CPF, CNPJ (including the alphanumeric one), RG, Pix key, license plate, CEP, area code.
 
@@ -9,6 +13,14 @@ Hide CPF, phone numbers, e-mail, Pix keys and other sensitive data in screenshot
 | Light                                                            | Dark                                                           |
 | ---------------------------------------------------------------- | -------------------------------------------------------------- |
 | ![SafeShot window, light theme](docs/shots/macos-light-main.png) | ![SafeShot window, dark theme](docs/shots/macos-dark-main.png) |
+
+## Highlights
+
+- **Finds it for you:** CPF, CNPJ, phone numbers, e-mail, Pix keys, cards, plates, CEP, QR codes and more, reading the image on your computer.
+- **Three ways to hide:** a solid bar (the safest), a labelled bar ("CPF", "Phone"…) or a soft smudge that the app reads again and turns into a bar if anything can still be read.
+- **A preview that equals the result**, and a pixel check of the exported file before it is handed over.
+- **A global shortcut** for "screenshot → shortcut → review → paste in the chat", and a queue for several screenshots.
+- **Nothing leaves the computer:** no telemetry and no network.
 
 ## Why it exists
 
@@ -70,7 +82,6 @@ pnpm test
 ```
 
 ## Roadmap
-
 
 ## Contributing
 

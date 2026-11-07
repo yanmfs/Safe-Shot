@@ -1,6 +1,10 @@
-# SafeShot
+<p align="center">
+  <img src="docs/banner.png" alt="SafeShot" width="100%">
+</p>
 
-[English](README.en.md)
+<p align="center"><a href="README.en.md">English</a> · <a href="../../releases">Download</a> · <a href="CONTRIBUTING.md">Contribuir</a></p>
+
+<p align="center"><img alt="licença MIT" src="https://img.shields.io/badge/licen%C3%A7a-MIT-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="sistema Windows | macOS" src="https://img.shields.io/badge/sistema-Windows%20%7C%20macOS-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="100% offline" src="https://img.shields.io/badge/100%25-offline-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="feito com Tauri 2" src="https://img.shields.io/badge/feito%20com-Tauri%202-d19a00?style=flat-square&labelColor=1b1f27"></p>
 
 Esconda CPF, telefone, e-mail, chave Pix e outros dados sensíveis em prints antes de enviar. Feito para dados brasileiros: CPF, CNPJ (inclusive o alfanumérico), RG, chave Pix, placa, CEP, DDD.
 
@@ -9,6 +13,14 @@ Esconda CPF, telefone, e-mail, chave Pix e outros dados sensíveis em prints ant
 | Claro                                                                | Escuro                                                               |
 | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | ![Janela do SafeShot no tema claro](docs/shots/macos-light-main.png) | ![Janela do SafeShot no tema escuro](docs/shots/macos-dark-main.png) |
+
+## Destaques
+
+- **Acha sozinho** CPF, CNPJ, telefone, e-mail, Pix, cartão, placa, CEP, QR Code e mais, lendo a imagem no seu computador.
+- **Três jeitos de esconder:** tarja sólida (a mais segura), tarja com rótulo ("CPF", "Telefone"…) ou um borrado suave que o app lê de novo e troca por tarja se algo ainda der para ler.
+- **Prévia igual ao resultado**, e uma conferência de pixels no arquivo exportado antes de entregá-lo.
+- **Atalho global** para o fluxo "print → atalho → revisar → colar no chat", e fila para vários prints.
+- **Nada sai do computador:** sem telemetria e sem rede.
 
 ## Por que existe
 
@@ -70,7 +82,6 @@ pnpm test
 ```
 
 ## Roadmap
-
 
 ## Contribuir
 
