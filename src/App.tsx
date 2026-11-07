@@ -6,7 +6,13 @@ import { Toaster } from "./components/Toaster";
 import { Tooltip, TooltipProvider } from "./components/Tooltip";
 import { Copy, Download } from "lucide-react";
 import { modKeyLabel } from "./core/os";
-import { copyResult, openFromDialog, pasteFromClipboard, saveResult } from "./features/doc/actions";
+import {
+  copyResult,
+  openFromDialog,
+  pasteFromClipboard,
+  runShortcut,
+  saveResult,
+} from "./features/doc/actions";
 import { useDoc } from "./features/doc/store";
 import { AboutDialog } from "./features/settings/AboutDialog";
 import { SettingsDialog } from "./features/settings/SettingsDialog";
@@ -19,6 +25,20 @@ import { EmptyState } from "./features/viewer/EmptyState";
 import { Viewer } from "./features/viewer/Viewer";
 import { platform } from "./platform";
 import { selectLang, useApp, useT } from "./store";
+
+let started: Promise<void> | undefined;
+
+// Runs once per window, even when React mounts the tree twice in development.
+async function start() {
+  await useApp.getState().hydrate();
+  if (!platform.hasGlobalShortcut) return;
+  const { shortcut } = useApp.getState().settings;
+  await platform
+    .registerShortcut(shortcut, () => void runShortcut())
+    .catch(() => {
+      useApp.getState().setShortcutError(shortcut);
+    });
+}
 
 export default function App() {
   const t = useT();
@@ -36,7 +56,7 @@ export default function App() {
   useShortcuts();
 
   useEffect(() => {
-    void useApp.getState().hydrate();
+    started ??= start();
   }, []);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ export const detectOs = (userAgent: string): Os =>
   /Mac|iPhone|iPad/i.test(userAgent) ? "macos" : "windows";
 
 export const defaultShortcut = (os: Os) =>
-  os === "macos" ? "Control+Alt+Command+V" : "Control+Alt+Shift+V";
+  os === "macos" ? "Control+Alt+Command+S" : "Control+Alt+Shift+S";
 
 // The clipboard on Windows expects CRLF; plain "\n" pastes as a single line in some apps.
 export const toClipboardText = (text: string, os: Os) =>

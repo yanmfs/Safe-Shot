@@ -2,8 +2,9 @@ import { create } from "zustand";
 import { detect, type Box, type Category, type Detection, type OcrPage } from "../../core/detect";
 import type { Rect } from "../../core/redact";
 import { getOcrEngine } from "../../ocr/engine";
+import { codeDetections, findCodes, loadBundledWasm } from "../../ocr/qr";
 import type { LoadedImage } from "../../platform";
-import { useApp } from "../../store";
+import { tNow, useApp } from "../../store";
 import { bitmapToRgba, decodeImage } from "./image";
 
 export interface Mark {
@@ -38,6 +39,7 @@ interface DocState {
   openFailed: boolean;
   doc: Doc | null;
   page: OcrPage | null;
+  codes: Box[];
   detections: Detection[];
   edit: Edit;
   past: Edit[];
@@ -58,6 +60,22 @@ interface DocState {
   redo: () => void;
 }
 
+let wasmReady: Promise<unknown> | undefined;
+
+async function readCodes(image: ReturnType<typeof bitmapToRgba>): Promise<Box[]> {
+  try {
+    await (wasmReady ??= loadBundledWasm());
+    return await findCodes(image);
+  } catch {
+    return [];
+  }
+}
+
+const merge = (page: OcrPage, codes: Box[]): Detection[] => [
+  ...detect(page, { terms: useApp.getState().settings.terms }),
+  ...codeDetections(codes, tNow("cat.qr")),
+];
+
 const contains = (box: Box, p: { x: number; y: number }) =>
   p.x >= box.x && p.x <= box.x + box.w && p.y >= box.y && p.y <= box.y + box.h;
 
@@ -72,6 +90,7 @@ export const useDoc = create<DocState>((set, get) => {
     openFailed: false,
     doc: null,
     page: null,
+    codes: [],
     detections: [],
     edit: emptyEdit,
     past: [],
@@ -98,6 +117,7 @@ export const useDoc = create<DocState>((set, get) => {
           bitmap,
         },
         page: null,
+        codes: [],
         detections: [],
         edit: emptyEdit,
         past: [],
@@ -105,15 +125,13 @@ export const useDoc = create<DocState>((set, get) => {
         selectedMark: null,
         status: "reading",
       });
+      const rgba = bitmapToRgba(bitmap);
+      // A code is found from pixels, so it still works when the text reading fails.
+      const codes = await readCodes(rgba);
+      set({ codes, detections: codeDetections(codes, tNow("cat.qr")) });
       try {
-        const page = await getOcrEngine().recognize(bitmapToRgba(bitmap), (progress) =>
-          set({ progress }),
-        );
-        set({
-          page,
-          detections: detect(page, { terms: useApp.getState().settings.terms }),
-          status: "ready",
-        });
+        const page = await getOcrEngine().recognize(rgba, (progress) => set({ progress }));
+        set({ page, detections: merge(page, codes), status: "ready" });
       } catch {
         set({ status: "ready", ocrFailed: true });
       }
@@ -125,6 +143,7 @@ export const useDoc = create<DocState>((set, get) => {
         status: "empty",
         doc: null,
         page: null,
+        codes: [],
         detections: [],
         edit: emptyEdit,
         past: [],
@@ -136,7 +155,7 @@ export const useDoc = create<DocState>((set, get) => {
     setTool: (tool) => set({ tool, selectedMark: null }),
     redetect: () => {
       const { page } = get();
-      if (page) set({ detections: detect(page, { terms: useApp.getState().settings.terms }) });
+      if (page) set({ detections: merge(page, get().codes) });
     },
     selectMark: (selectedMark) => set({ selectedMark }),
 

@@ -10,6 +10,8 @@ interface AppState {
   settingsOpen: boolean;
   aboutOpen: boolean;
   whyOpen: boolean;
+  shortcutError: string | null;
+  setShortcutError: (shortcut: string | null) => void;
   hydrate: () => Promise<void>;
   update: (patch: Partial<Settings>) => void;
   setDialog: (dialog: "settingsOpen" | "aboutOpen" | "whyOpen", open: boolean) => void;
@@ -21,9 +23,11 @@ export const useApp = create<AppState>((set, get) => ({
   settingsOpen: false,
   aboutOpen: false,
   whyOpen: false,
+  shortcutError: null,
+  setShortcutError: (shortcutError) => set({ shortcutError }),
 
   hydrate: async () => {
-    const saved = parseSettings(await platform.loadSettings().catch(() => null));
+    const saved = parseSettings(await platform.loadSettings().catch(() => null), platform.os);
     set({ settings: saved, ready: true });
   },
 

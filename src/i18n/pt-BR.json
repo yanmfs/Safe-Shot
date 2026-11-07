@@ -88,5 +88,18 @@
   "about.madeBy": "Feito por {author}",
   "web.notice": "Versão de teste no navegador. Nada sai do seu computador.",
   "settings.terms": "Sempre ocultar (um termo por linha)",
-  "settings.termsHelp": "Nomes, empresas ou palavras que você nunca quer mostrar. Ficam só neste computador. Ignora maiúsculas e acentos e aceita um erro de leitura em palavras longas."
+  "settings.termsHelp": "Nomes, empresas ou palavras que você nunca quer mostrar. Ficam só neste computador. Ignora maiúsculas e acentos e aceita um erro de leitura em palavras longas.",
+  "settings.shortcut": "Atalho global",
+  "settings.shortcutHelp": "Abre o SafeShot com a imagem que está na área de transferência e já começa a análise. Fluxo: tire o print para a área de transferência, aperte o atalho, revise e copie.",
+  "settings.shortcutChange": "Alterar",
+  "settings.shortcutRecording": "Aperte as teclas…",
+  "settings.shortcutCancel": "Cancelar",
+  "settings.shortcutNeedsModifier": "Use pelo menos uma tecla de modificação, como Ctrl, Alt ou ⌘.",
+  "settings.shortcutFailed": "Não consegui registrar {shortcut}. Outro aplicativo pode estar usando. Escolha outro.",
+  "settings.shortcutUnavailable": "O atalho global só existe no aplicativo instalado.",
+  "settings.format": "Formato ao salvar",
+  "settings.format.png": "PNG (sem perdas)",
+  "settings.format.jpeg": "JPEG (menor, para fotos)",
+  "settings.formatHelp": "Copiar para a área de transferência sempre usa PNG. No JPEG as tarjas crescem até blocos de 16 pixels, para a compressão não deixar rastro do que está embaixo.",
+  "sidebar.qrWarning": "Pode conter dados, como cartão de embarque ou Pix."
 }

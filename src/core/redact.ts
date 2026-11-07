@@ -28,6 +28,20 @@ export function toPixelRect(rect: Rect, width: number, height: number): Rect | n
   return x1 > x0 && y1 > y0 ? { x: x0, y: y0, w: x1 - x0, h: y1 - y0 } : null;
 }
 
+// JPEG codes 16x16 blocks. Growing each bar to whole blocks keeps the blocks under it solid, so
+// compression cannot smear the original into the covered area.
+export function alignRects(rects: Rect[], width: number, height: number, block = 16): Rect[] {
+  return rects.flatMap((rect) => {
+    const px = toPixelRect(rect, width, height);
+    if (!px) return [];
+    const x0 = Math.floor(px.x / block) * block;
+    const y0 = Math.floor(px.y / block) * block;
+    const x1 = Math.min(width, Math.ceil((px.x + px.w) / block) * block);
+    const y1 = Math.min(height, Math.ceil((px.y + px.h) / block) * block);
+    return [{ x: x0, y: y0, w: x1 - x0, h: y1 - y0 }];
+  });
+}
+
 export function paintBars(image: Rgba, rects: Rect[], color: BarColor): void {
   const [r, g, b] = BAR_RGB[color];
   for (const rect of rects) {
@@ -101,4 +115,15 @@ export function endsAtIend(png: Uint8Array): boolean {
     offset = next;
   }
   return false;
+}
+
+// A JPEG ends with the EOI marker; anything after it could be a leftover of the uncropped file.
+export function endsAtEoi(jpeg: Uint8Array): boolean {
+  return (
+    jpeg.length > 4 &&
+    jpeg[0] === 0xff &&
+    jpeg[1] === 0xd8 &&
+    jpeg[jpeg.length - 2] === 0xff &&
+    jpeg[jpeg.length - 1] === 0xd9
+  );
 }

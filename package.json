@@ -32,7 +32,8 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tesseract.js": "^7.0.0",
-    "zustand": "^5.0.16"
+    "zustand": "^5.0.16",
+    "zxing-wasm": "^3.1.6"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -47,6 +48,7 @@
     "eslint": "^10.14.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
+    "jpeg-js": "^0.4.4",
     "playwright": "^1.65.0",
     "pngjs": "^7.0.0",
     "prettier": "^3.9.10",

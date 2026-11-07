@@ -16,8 +16,8 @@ describe("detectOs", () => {
 
 describe("defaultShortcut", () => {
   it("uses Control+Alt+Command on macOS and Control+Alt+Shift on Windows", () => {
-    expect(defaultShortcut("macos")).toBe("Control+Alt+Command+V");
-    expect(defaultShortcut("windows")).toBe("Control+Alt+Shift+V");
+    expect(defaultShortcut("macos")).toBe("Control+Alt+Command+S");
+    expect(defaultShortcut("windows")).toBe("Control+Alt+Shift+S");
   });
 });
 
