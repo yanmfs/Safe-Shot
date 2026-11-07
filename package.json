@@ -74,10 +74,5 @@
     "tauri",
     "desktop"
   ],
-  "packageManager": "pnpm@12.18.0",
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "tesseract.js"
-    ]
-  }
+  "packageManager": "pnpm@12.18.0"
 }
