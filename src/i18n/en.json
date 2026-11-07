@@ -86,5 +86,7 @@
   "about.license": "MIT License",
   "about.github": "Source on GitHub",
   "about.madeBy": "Made by {author}",
-  "web.notice": "Browser demo. Nothing leaves your computer."
+  "web.notice": "Browser demo. Nothing leaves your computer.",
+  "settings.terms": "Always hide (one term per line)",
+  "settings.termsHelp": "Names, companies or words you never want to show. They stay on this computer only. Ignores case and accents and tolerates one reading mistake in long words."
 }

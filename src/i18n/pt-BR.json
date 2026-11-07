@@ -86,5 +86,7 @@
   "about.license": "Licença MIT",
   "about.github": "Código no GitHub",
   "about.madeBy": "Feito por {author}",
-  "web.notice": "Versão de teste no navegador. Nada sai do seu computador."
+  "web.notice": "Versão de teste no navegador. Nada sai do seu computador.",
+  "settings.terms": "Sempre ocultar (um termo por linha)",
+  "settings.termsHelp": "Nomes, empresas ou palavras que você nunca quer mostrar. Ficam só neste computador. Ignora maiúsculas e acentos e aceita um erro de leitura em palavras longas."
 }

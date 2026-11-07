@@ -3,6 +3,7 @@ import { Select } from "../../components/Select";
 import type { LangSetting } from "../../i18n";
 import type { ThemeSetting } from "../../settings";
 import { useApp, useT } from "../../store";
+import { useDoc } from "../doc/store";
 
 export function SettingsDialog() {
   const t = useT();
@@ -17,6 +18,27 @@ export function SettingsDialog() {
       onOpenChange={(o) => setDialog("settingsOpen", o)}
       title={t("settings.title")}
     >
+      <div className="mb-4 flex flex-col gap-1.5">
+        <label htmlFor="terms" className="text-sm">
+          {t("settings.terms")}
+        </label>
+        <textarea
+          id="terms"
+          rows={4}
+          defaultValue={settings.terms.join("\n")}
+          onBlur={(e) => {
+            update({
+              terms: e.target.value
+                .split("\n")
+                .map((l) => l.trim())
+                .filter(Boolean),
+            });
+            useDoc.getState().redetect();
+          }}
+          className="w-full resize-none rounded-control border border-border bg-surface px-3 py-2 text-sm"
+        />
+        <p className="text-xs text-muted">{t("settings.termsHelp")}</p>
+      </div>
       <div className="grid grid-cols-2 gap-3">
         <Select
           label={t("settings.language")}

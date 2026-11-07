@@ -3,6 +3,7 @@ import { detect, type Box, type Category, type Detection, type OcrPage } from ".
 import type { Rect } from "../../core/redact";
 import { getOcrEngine } from "../../ocr/engine";
 import type { LoadedImage } from "../../platform";
+import { useApp } from "../../store";
 import { bitmapToRgba, decodeImage } from "./image";
 
 export interface Mark {
@@ -46,6 +47,7 @@ interface DocState {
   open: (image: LoadedImage) => Promise<void>;
   reset: () => void;
   setTool: (tool: Tool) => void;
+  redetect: () => void;
   selectMark: (id: string | null) => void;
   toggleDetection: (id: string) => void;
   toggleCategory: (category: Category, hidden: boolean) => void;
@@ -107,7 +109,11 @@ export const useDoc = create<DocState>((set, get) => {
         const page = await getOcrEngine().recognize(bitmapToRgba(bitmap), (progress) =>
           set({ progress }),
         );
-        set({ page, detections: detect(page), status: "ready" });
+        set({
+          page,
+          detections: detect(page, { terms: useApp.getState().settings.terms }),
+          status: "ready",
+        });
       } catch {
         set({ status: "ready", ocrFailed: true });
       }
@@ -128,6 +134,10 @@ export const useDoc = create<DocState>((set, get) => {
     },
 
     setTool: (tool) => set({ tool, selectedMark: null }),
+    redetect: () => {
+      const { page } = get();
+      if (page) set({ detections: detect(page, { terms: useApp.getState().settings.terms }) });
+    },
     selectMark: (selectedMark) => set({ selectedMark }),
 
     toggleDetection: (id) => {

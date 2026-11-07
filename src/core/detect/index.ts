@@ -1,4 +1,5 @@
 import { detectors } from "./detectors";
+import { termMatches } from "./terms";
 import { boxesFor, buildLine, overlaps, type LineCtx } from "./text";
 import type { Category, Detection, Match, OcrPage } from "./types";
 
@@ -83,11 +84,18 @@ function preview(category: Category, text: string): string {
   return maskPreview(text);
 }
 
-export function detect(page: OcrPage): Detection[] {
+export interface DetectOptions {
+  // The person's own "always hide" list.
+  terms?: string[];
+}
+
+export function detect(page: OcrPage, options: DetectOptions = {}): Detection[] {
   const all = page.lines.filter((l) => l.words.length > 0).map(buildLine);
 
   const matches = all.flatMap((ctx) =>
-    detectors.flatMap((run) => run(ctx, all).map((match) => ({ ctx, match }))),
+    [...detectors.flatMap((run) => run(ctx, all)), ...termMatches(ctx, options.terms ?? [])].map(
+      (match) => ({ ctx, match }),
+    ),
   );
 
   return resolve(matches)
