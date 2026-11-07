@@ -79,7 +79,7 @@ describe.skipIf(names.length === 0)("OCR recall on generated screens", () => {
       const total = runs.reduce((a, r) => a + r.total, 0);
       return `${category.padEnd(12)} ${found}/${total}`;
     });
-    console.log(
+    process.stdout.write(
       `\nRecall by category (psm ${process.env.PSM ?? "11"})\n${rows.join("\n")}\n${perFile.join("\n")}`,
     );
   });
