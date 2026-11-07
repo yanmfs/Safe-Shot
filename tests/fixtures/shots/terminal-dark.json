@@ -1,0 +1,16 @@
+{
+  "expected": [
+    {
+      "category": "email",
+      "text": "dev.exemplo@exemplo.com"
+    },
+    {
+      "category": "credential",
+      "text": "ghp_a8Kd92LmQ4xV7nB1zT6yW3pR5sE0uHjC2oFi"
+    },
+    {
+      "category": "ip",
+      "text": "192.168.10.45"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "expected": [
+    {
+      "category": "cpf",
+      "text": "556.585.056-82"
+    },
+    {
+      "category": "pix",
+      "text": "3f2b8c1e-9d47-4a6b-8e15-7c0d2a9b6f34"
+    },
+    {
+      "category": "phone",
+      "text": "(62) 99999-8888"
+    },
+    {
+      "category": "email",
+      "text": "carla.souza@exemplo.com.br"
+    }
+  ]
+}

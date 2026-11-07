@@ -1,0 +1,24 @@
+{
+  "expected": [
+    {
+      "category": "bank",
+      "text": "1234"
+    },
+    {
+      "category": "bank",
+      "text": "56789-0"
+    },
+    {
+      "category": "name",
+      "text": "Joao Pereira Lima"
+    },
+    {
+      "category": "card",
+      "text": "4445 3146 0983 0708"
+    },
+    {
+      "category": "cnpj",
+      "text": "53.000.003/0001-91"
+    }
+  ]
+}
