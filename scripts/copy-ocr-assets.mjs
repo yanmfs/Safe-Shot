@@ -30,6 +30,10 @@ export function copyOcrAssets(target = join(root, "public", "ocr")) {
     if (!existsSync(source)) throw new Error(`Missing traineddata for ${lang} in ${dir}`);
     copyFileSync(source, join(target, "lang", `${lang}.traineddata.gz`));
   }
+  copyFileSync(
+    join(root, "node_modules", "zxing-wasm", "dist", "reader", "zxing_reader.wasm"),
+    join(target, "zxing_reader.wasm"),
+  );
   return target;
 }
 

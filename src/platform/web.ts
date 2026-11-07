@@ -17,6 +17,10 @@ async function fromFile(file: File): Promise<LoadedImage> {
 export const web: Platform = {
   os: osFromQuery() ?? detectOs(navigator.userAgent),
   systemLocale: navigator.language,
+  hasGlobalShortcut: false,
+  registerShortcut: () => Promise.reject(new Error("no global shortcut in the browser")),
+  unregisterShortcut: () => Promise.resolve(),
+  bringToFront: () => Promise.resolve(),
   pickImage: () =>
     new Promise((resolve) => {
       const input = document.createElement("input");
@@ -43,8 +47,9 @@ export const web: Platform = {
     navigator.clipboard.write([
       new ClipboardItem({ "image/png": new Blob([png as BlobPart], { type: "image/png" }) }),
     ]),
-  saveImage: (png, suggestedName) => {
-    const url = URL.createObjectURL(new Blob([png as BlobPart], { type: "image/png" }));
+  saveImage: (bytes, suggestedName) => {
+    const type = /\.jpe?g$/i.test(suggestedName) ? "image/jpeg" : "image/png";
+    const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type }));
     const link = document.createElement("a");
     link.href = url;
     link.download = suggestedName;

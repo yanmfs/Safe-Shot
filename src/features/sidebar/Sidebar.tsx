@@ -61,6 +61,12 @@ function Group({ category, items }: { category: Category; items: Detection[] }) 
           <li key={d.id} className="flex min-h-9 items-center justify-between gap-3">
             <span className="flex min-w-0 flex-col">
               <span className="truncate font-mono text-[13px]">{d.preview}</span>
+              {d.category === "qr" && (
+                <span className="flex items-start gap-1 text-xs text-muted">
+                  <TriangleAlert aria-hidden className="mt-0.5 size-3 shrink-0" />
+                  {t("sidebar.qrWarning")}
+                </span>
+              )}
               {d.confidence === "medium" && (
                 <span className="flex items-center gap-1 text-xs text-warning">
                   <TriangleAlert aria-hidden className="size-3" />

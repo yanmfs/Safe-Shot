@@ -1,6 +1,8 @@
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { readImage, writeImage } from "@tauri-apps/plugin-clipboard-manager";
+import { register, unregister } from "@tauri-apps/plugin-global-shortcut";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { load, type Store } from "@tauri-apps/plugin-store";
@@ -33,6 +35,18 @@ async function rgbaToPng(rgba: Uint8Array, width: number, height: number): Promi
 export const tauri: Platform = {
   os: detectOs(navigator.userAgent),
   systemLocale: navigator.language,
+  hasGlobalShortcut: true,
+  registerShortcut: (accelerator, onPressed) =>
+    register(accelerator, (event) => {
+      if (event.state === "Pressed") onPressed();
+    }),
+  unregisterShortcut: (accelerator) => unregister(accelerator),
+  bringToFront: async () => {
+    const win = getCurrentWindow();
+    await win.show();
+    await win.unminimize();
+    await win.setFocus();
+  },
   pickImage: async () => {
     const path = await open({
       multiple: false,
@@ -50,16 +64,19 @@ export const tauri: Platform = {
     }
   },
   copyImage: (png) => writeImage(png),
-  saveImage: async (png, suggestedName, originalPath) => {
+  saveImage: async (bytes, suggestedName, originalPath) => {
+    const jpeg = /\.jpe?g$/i.test(suggestedName);
     const target = await save({
       defaultPath: originalPath ? dirname(originalPath) + suggestedName : suggestedName,
-      filters: [{ name: "PNG", extensions: ["png"] }],
+      filters: [
+        jpeg ? { name: "JPEG", extensions: ["jpg", "jpeg"] } : { name: "PNG", extensions: ["png"] },
+      ],
     });
     if (!target) return false;
     const headers: Record<string, string> = { "x-target": encodeURIComponent(target) };
     if (originalPath) headers["x-original"] = encodeURIComponent(originalPath);
     try {
-      await invoke("save_image_file", png, { headers });
+      await invoke("save_image_file", bytes, { headers });
     } catch (error) {
       if (String(error).includes("overwrite")) throw new SaveRefusedError();
       throw error;

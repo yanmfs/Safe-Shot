@@ -19,11 +19,17 @@ export interface DropHandlers {
 export interface Platform {
   os: Os;
   systemLocale: string;
+  hasGlobalShortcut: boolean;
+  registerShortcut(accelerator: string, onPressed: () => void): Promise<void>;
+  unregisterShortcut(accelerator: string): Promise<void>;
+  // Shows and focuses the window, for when the shortcut fires while it is hidden or behind others.
+  bringToFront(): Promise<void>;
   pickImage(): Promise<LoadedImage | null>;
   readClipboardImage(): Promise<LoadedImage | null>;
   copyImage(png: Uint8Array): Promise<void>;
   // Resolves false when the person cancels the dialog.
-  saveImage(png: Uint8Array, suggestedName: string, originalPath?: string): Promise<boolean>;
+  // The extension of `suggestedName` (png or jpg) says which format `bytes` hold.
+  saveImage(bytes: Uint8Array, suggestedName: string, originalPath?: string): Promise<boolean>;
   onFileDrop(handlers: DropHandlers): Promise<Unlisten>;
   loadSettings(): Promise<unknown>;
   saveSettings(settings: Settings): Promise<void>;

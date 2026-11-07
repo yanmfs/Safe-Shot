@@ -1,9 +1,10 @@
 import { Dialog } from "../../components/Dialog";
 import { Select } from "../../components/Select";
 import type { LangSetting } from "../../i18n";
-import type { ThemeSetting } from "../../settings";
+import type { ExportFormat, ThemeSetting } from "../../settings";
 import { useApp, useT } from "../../store";
 import { useDoc } from "../doc/store";
+import { ShortcutRecorder } from "./ShortcutRecorder";
 
 export function SettingsDialog() {
   const t = useT();
@@ -38,6 +39,21 @@ export function SettingsDialog() {
           className="w-full resize-none rounded-control border border-border bg-surface px-3 py-2 text-sm"
         />
         <p className="text-xs text-muted">{t("settings.termsHelp")}</p>
+      </div>
+      <div className="mb-4 flex flex-col gap-1.5">
+        <span className="text-sm">{t("settings.shortcut")}</span>
+        <ShortcutRecorder />
+      </div>
+      <div className="mb-4">
+        <Select
+          label={t("settings.format")}
+          value={settings.format}
+          onChange={(format: ExportFormat) => update({ format })}
+        >
+          <option value="png">{t("settings.format.png")}</option>
+          <option value="jpeg">{t("settings.format.jpeg")}</option>
+        </Select>
+        <p className="mt-1 text-xs text-muted">{t("settings.formatHelp")}</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <Select

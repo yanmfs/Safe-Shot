@@ -1,7 +1,16 @@
+import jpeg from "jpeg-js";
 import { PNG } from "pngjs";
 import { describe, expect, it } from "vitest";
 import { meanLuminance, prepareForOcr, toOriginalCoordinates } from "../src/core/ocr-prep";
-import { endsAtIend, paintBars, toPixelRect, verifyBars, type Rgba } from "../src/core/redact";
+import {
+  alignRects,
+  endsAtEoi,
+  endsAtIend,
+  paintBars,
+  toPixelRect,
+  verifyBars,
+  type Rgba,
+} from "../src/core/redact";
 
 function solid(width: number, height: number, rgb: [number, number, number]): Rgba {
   const data = new Uint8ClampedArray(width * height * 4);
@@ -122,5 +131,72 @@ describe("prepareForOcr", () => {
     const back = toOriginalCoordinates(page, 2);
     expect(back.width).toBe(100);
     expect(back.lines[0]?.words[0]?.box).toEqual({ x: 10, y: 5, w: 20, h: 10 });
+  });
+});
+
+describe("JPEG bars", () => {
+  // Busy content around the bar, like text on a screenshot, is what smears into a lossy bar.
+  function noisy(width: number, height: number): Rgba {
+    const data = new Uint8ClampedArray(width * height * 4);
+    for (let i = 0; i < width * height; i++) {
+      const v = (i * 2654435761) % 256;
+      data.set([v, 255 - v, (v * 7) % 256, 255], i * 4);
+    }
+    return { data, width, height };
+  }
+
+  it("grows bars to whole 16-pixel blocks inside the image", () => {
+    expect(alignRects([{ x: 20, y: 5, w: 10, h: 3 }], 100, 100)).toEqual([
+      { x: 16, y: 0, w: 16, h: 16 },
+    ]);
+    expect(alignRects([{ x: 90, y: 90, w: 10, h: 10 }], 100, 100)).toEqual([
+      { x: 80, y: 80, w: 20, h: 20 },
+    ]);
+    expect(alignRects([{ x: 300, y: 0, w: 5, h: 5 }], 100, 100)).toEqual([]);
+  });
+
+  it("keeps the covered pixels solid after a real JPEG round trip", () => {
+    const image = noisy(130, 90);
+    const rects = [{ x: 21, y: 13, w: 47, h: 11 }];
+    paintBars(image, alignRects(rects, image.width, image.height), "black");
+    const encoded = jpeg.encode(
+      { data: Buffer.from(image.data), width: image.width, height: image.height },
+      92,
+    );
+    const decoded = jpeg.decode(encoded.data, { useTArray: true });
+    const back: Rgba = {
+      data: new Uint8ClampedArray(decoded.data),
+      width: decoded.width,
+      height: decoded.height,
+    };
+    expect(verifyBars(back, rects, "black", 12).ok).toBe(true);
+  });
+
+  it("would catch bars that were not aligned", () => {
+    const image = noisy(130, 90);
+    const rects = [{ x: 21, y: 13, w: 47, h: 11 }];
+    paintBars(image, rects, "black");
+    const encoded = jpeg.encode(
+      { data: Buffer.from(image.data), width: image.width, height: image.height },
+      92,
+    );
+    const decoded = jpeg.decode(encoded.data, { useTArray: true });
+    const back: Rgba = {
+      data: new Uint8ClampedArray(decoded.data),
+      width: decoded.width,
+      height: decoded.height,
+    };
+    expect(verifyBars(back, rects, "black", 12).ok).toBe(false);
+  });
+
+  it("checks the end marker", () => {
+    const encoded = jpeg.encode(
+      { data: Buffer.alloc(16 * 16 * 4, 255), width: 16, height: 16 },
+      90,
+    );
+    const bytes = new Uint8Array(encoded.data);
+    expect(endsAtEoi(bytes)).toBe(true);
+    expect(endsAtEoi(new Uint8Array([...bytes, 0]))).toBe(false);
+    expect(endsAtEoi(new Uint8Array([1, 2, 3, 4, 5]))).toBe(false);
   });
 });
