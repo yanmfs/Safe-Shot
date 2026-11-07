@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Hide sensitive data in screenshots before you share them."
 authors = ["Yan Suzano"]
 license = "MIT"
-repository = "https://github.com/yanmfs/Safe-Shot"
+repository = "https://github.com/yanmfs/SafeShot"
 edition = "2021"
 
 [lib]
