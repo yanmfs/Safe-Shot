@@ -35,11 +35,12 @@ xattr -cr /Applications/SafeShot.app
 
 ## Como usar
 
-1. Arraste um print para a janela, cole com `Ctrl/⌘+V` ou abra um arquivo (PNG, JPG, WEBP, BMP, GIF; HEIC no macOS). Também dá para tirar o print para a área de transferência e apertar o atalho global (`Ctrl+Alt+Shift+S` no Windows, `⌃⌥⌘S` no macOS): o SafeShot abre com a imagem e já começa a leitura.
+1. Arraste um ou mais prints para a janela, cole com `Ctrl/⌘+V` ou abra arquivos (PNG, JPG, WEBP, BMP, GIF; HEIC no macOS). Também dá para tirar o print para a área de transferência e apertar o atalho global (`Ctrl+Alt+Shift+S` no Windows, `⌃⌥⌘S` no macOS): o SafeShot abre com a imagem e já começa a leitura.
 2. Espere a leitura do texto (alguns segundos). Os dados achados aparecem na imagem e na lista, já marcados para ocultar.
 3. Revise: desmarque o que quiser manter, clique em qualquer palavra para ocultá-la, ou desenhe retângulos com `R`.
 4. Copie com `Ctrl/⌘+C` ou salve com `Ctrl/⌘+S`. O arquivo salvo se chama `<original>-safeshot.png` (ou `.jpg`, se você escolher JPEG nas configurações); o original nunca é alterado.
 5. Confira a imagem antes de enviar. Segurar `Alt` mostra o original para comparar.
+6. Com vários arquivos, o botão "Próxima" passa para a imagem seguinte da fila; cada uma é revisada e exportada separadamente.
 
 ## O que ele faz e o que não faz
 
@@ -69,7 +70,6 @@ pnpm test
 
 ## Roadmap
 
-- Fila de várias imagens.
 - OCR nativo (Vision no macOS, Windows.Media.Ocr) como alternativa ao Tesseract.
 - Menu nativo com Desfazer e Refazer.
 

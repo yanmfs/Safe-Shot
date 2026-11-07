@@ -15,10 +15,7 @@ export function useIntake(): { dragging: boolean } {
     void platform
       .onFileDrop({
         hover: setDragging,
-        images: (images) => {
-          const first = images[0];
-          if (first) void useDoc.getState().open(first);
-        },
+        images: (images) => void useDoc.getState().openMany(images),
         failed: () => showToast(tNow("drop.error"), "error"),
       })
       .then((fn) => (cancelled ? fn() : (unlisten = fn)));

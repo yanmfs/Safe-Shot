@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { detect, type Box, type Category, type Detection, type OcrPage } from "../../core/detect";
+import { advance, startQueue, type Queue } from "../../core/queue";
 import type { Rect } from "../../core/redact";
 import { getOcrEngine } from "../../ocr/engine";
 import { codeDetections, findCodes, loadBundledWasm } from "../../ocr/qr";
@@ -46,7 +47,10 @@ interface DocState {
   future: Edit[];
   tool: Tool;
   selectedMark: string | null;
-  open: (image: LoadedImage) => Promise<void>;
+  queue: Queue<LoadedImage> | null;
+  open: (image: LoadedImage, keepQueue?: boolean) => Promise<void>;
+  openMany: (images: LoadedImage[]) => Promise<void>;
+  nextInQueue: () => Promise<void>;
   reset: () => void;
   setTool: (tool: Tool) => void;
   redetect: () => void;
@@ -97,8 +101,25 @@ export const useDoc = create<DocState>((set, get) => {
     future: [],
     tool: "select",
     selectedMark: null,
+    queue: null,
 
-    open: async (image) => {
+    openMany: async (images) => {
+      const started = startQueue(images);
+      if (!started) return;
+      await get().open(started.first, true);
+      set({ queue: started.queue.total > 1 ? started.queue : null });
+    },
+
+    nextInQueue: async () => {
+      const { queue } = get();
+      const step = queue ? advance(queue) : null;
+      if (!step) return;
+      set({ queue: step.queue });
+      await get().open(step.next, true);
+    },
+
+    open: async (image, keepQueue = false) => {
+      if (!keepQueue) set({ queue: null });
       get().doc?.bitmap.close();
       set({ status: "decoding", progress: 0, ocrFailed: false, openFailed: false });
       let bitmap: ImageBitmap;
@@ -140,6 +161,7 @@ export const useDoc = create<DocState>((set, get) => {
     reset: () => {
       get().doc?.bitmap.close();
       set({
+        queue: null,
         status: "empty",
         doc: null,
         page: null,
