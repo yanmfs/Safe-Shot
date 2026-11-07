@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { PNG } from "pngjs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { detect, type Category, type Detection } from "../src/core/detect";
+import { detect, type Category, type Detection, type OcrPage } from "../src/core/detect";
 import type { Rgba } from "../src/core/redact";
 import { createTesseractEngine } from "../src/ocr/tesseract";
 import type { OcrEngine } from "../src/ocr/types";
@@ -53,6 +53,9 @@ function load(name: string): Rgba {
   return { data: new Uint8ClampedArray(png.data), width: png.width, height: png.height };
 }
 
+// Pages read by another engine (the native macOS one writes them with `cargo test dump_pages -- --ignored`).
+const pagesDir = process.env.OCR_PAGES_DIR;
+
 const results = new Map<string, { found: number; total: number }[]>();
 const perFile: string[] = [];
 
@@ -60,6 +63,7 @@ describe.skipIf(names.length === 0)("OCR recall on generated screens", () => {
   let engine: OcrEngine;
 
   beforeAll(() => {
+    if (pagesDir) return;
     const target = copyOcrAssets();
     engine = createTesseractEngine({
       paths: { langPath: join(target, "lang") },
@@ -73,14 +77,14 @@ describe.skipIf(names.length === 0)("OCR recall on generated screens", () => {
   }, 60_000);
 
   afterAll(async () => {
-    await engine.terminate();
+    await engine?.terminate();
     const rows = [...results.entries()].map(([category, runs]) => {
       const found = runs.reduce((a, r) => a + r.found, 0);
       const total = runs.reduce((a, r) => a + r.total, 0);
       return `${category.padEnd(12)} ${found}/${total}`;
     });
     process.stdout.write(
-      `\nRecall by category (psm ${process.env.PSM ?? "11"})\n${rows.join("\n")}\n${perFile.join("\n")}`,
+      `\nRecall by category (${pagesDir ? "native pages" : `psm ${process.env.PSM ?? "11"}`})\n${rows.join("\n")}\n${perFile.join("\n")}`,
     );
   });
 
@@ -88,7 +92,9 @@ describe.skipIf(names.length === 0)("OCR recall on generated screens", () => {
     const { expected } = JSON.parse(readFileSync(join(shots, `${name}.json`), "utf8")) as {
       expected: Expected[];
     };
-    const page = await engine.recognize(load(name));
+    const page = pagesDir
+      ? (JSON.parse(readFileSync(join(pagesDir, `${name}.json`), "utf8")) as OcrPage)
+      : await engine.recognize(load(name));
     const found = detect(page);
     const missed: string[] = [];
     for (const e of expected) {

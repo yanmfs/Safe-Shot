@@ -6,6 +6,7 @@ import { register, unregister } from "@tauri-apps/plugin-global-shortcut";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { load, type Store } from "@tauri-apps/plugin-store";
+import type { OcrPage } from "../core/detect";
 import { detectOs } from "../core/os";
 import { SaveRefusedError, type LoadedImage, type Platform } from "./types";
 
@@ -47,6 +48,7 @@ export const tauri: Platform = {
     await win.unminimize();
     await win.setFocus();
   },
+  nativeOcr: (png) => invoke<OcrPage>("native_ocr", png),
   pickImages: async () => {
     const paths = await open({
       multiple: true,

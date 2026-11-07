@@ -1,7 +1,8 @@
 import { Dialog } from "../../components/Dialog";
+import { platform } from "../../platform";
 import { Select } from "../../components/Select";
 import type { LangSetting } from "../../i18n";
-import type { ExportFormat, ThemeSetting } from "../../settings";
+import type { ExportFormat, Settings, ThemeSetting } from "../../settings";
 import { useApp, useT } from "../../store";
 import { useDoc } from "../doc/store";
 import { ShortcutRecorder } from "./ShortcutRecorder";
@@ -44,6 +45,19 @@ export function SettingsDialog() {
         <span className="text-sm">{t("settings.shortcut")}</span>
         <ShortcutRecorder />
       </div>
+      {platform.nativeOcr && (
+        <div className="mb-4">
+          <Select
+            label={t("settings.ocr")}
+            value={settings.ocrEngine}
+            onChange={(ocrEngine: Settings["ocrEngine"]) => update({ ocrEngine })}
+          >
+            <option value="auto">{t("settings.ocr.auto")}</option>
+            <option value="tesseract">{t("settings.ocr.tesseract")}</option>
+          </Select>
+          <p className="mt-1 text-xs text-muted">{t("settings.ocrHelp")}</p>
+        </div>
+      )}
       <div className="mb-4">
         <Select
           label={t("settings.format")}

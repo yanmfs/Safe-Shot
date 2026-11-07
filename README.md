@@ -44,7 +44,7 @@ xattr -cr /Applications/SafeShot.app
 
 ## O que ele faz e o que não faz
 
-Faz: lê o texto da imagem no seu computador (Tesseract, português e inglês), procura CPF, CNPJ, RG e outros documentos com número de contexto, PIS, CNS, telefone com DDD válido, e-mail, CEP, endereço, chave Pix e Pix copia e cola, cartão (com verificação Luhn), agência e conta, placa, data de nascimento, nome rotulado, IP, credenciais conhecidas e URLs com segredo, QR Codes e códigos de barras, além de uma lista sua de termos para sempre ocultar. A exportação usa tarja sólida (preta, branca ou cinza), apaga metadados e confere os pixels da imagem gerada antes de entregá-la.
+Faz: lê o texto da imagem no seu computador (com o leitor do próprio sistema, Vision no macOS e o OCR do Windows, e com o Tesseract em português e inglês como alternativa), procura CPF, CNPJ, RG e outros documentos com número de contexto, PIS, CNS, telefone com DDD válido, e-mail, CEP, endereço, chave Pix e Pix copia e cola, cartão (com verificação Luhn), agência e conta, placa, data de nascimento, nome rotulado, IP, credenciais conhecidas e URLs com segredo, QR Codes e códigos de barras, além de uma lista sua de termos para sempre ocultar. A exportação usa tarja sólida (preta, branca ou cinza), apaga metadados e confere os pixels da imagem gerada antes de entregá-la.
 
 Não faz:
 
@@ -56,7 +56,7 @@ Não faz:
 
 ## Privacidade
 
-Nada sai do computador: o OCR roda localmente com arquivos empacotados no app e a política de segurança do webview bloqueia conexões externas. Nenhuma imagem é gravada em disco além da exportação que você pede, não há histórico e os logs não guardam texto reconhecido. Para reportar uma falha de detecção ou de privacidade, veja o [SECURITY.md](SECURITY.md).
+Nada sai do computador: o OCR roda localmente (leitor do sistema ou Tesseract, com arquivos empacotados no app) e a política de segurança do webview bloqueia conexões externas. Nenhuma imagem é gravada em disco além da exportação que você pede, não há histórico e os logs não guardam texto reconhecido. Para reportar uma falha de detecção ou de privacidade, veja o [SECURITY.md](SECURITY.md).
 
 ## Rodar localmente
 
@@ -70,7 +70,6 @@ pnpm test
 
 ## Roadmap
 
-- OCR nativo (Vision no macOS, Windows.Media.Ocr) como alternativa ao Tesseract.
 - Menu nativo com Desfazer e Refazer.
 
 ## Contribuir
