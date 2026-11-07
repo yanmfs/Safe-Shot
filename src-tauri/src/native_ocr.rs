@@ -60,6 +60,7 @@ pub fn png_size(bytes: &[u8]) -> Option<(u32, u32)> {
 }
 
 /// Splits a line into words as (start, length) in UTF-16 units, which is what Vision ranges use.
+#[cfg(any(target_os = "macos", test))]
 pub fn word_ranges(text: &str) -> Vec<(usize, usize)> {
     let mut ranges = Vec::new();
     let mut start: Option<usize> = None;
