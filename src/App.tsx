@@ -24,14 +24,55 @@ import { useIntake } from "./features/useIntake";
 import { useShortcuts } from "./features/useShortcuts";
 import { EmptyState } from "./features/viewer/EmptyState";
 import { Viewer } from "./features/viewer/Viewer";
-import { platform } from "./platform";
-import { selectLang, useApp, useT } from "./store";
+import { firstOf } from "./features/actionGuard";
+import { platform, type MenuLabels } from "./platform";
+import { selectLang, tNow, useApp, useT } from "./store";
 
 let started: Promise<void> | undefined;
+
+function menuLabels(): MenuLabels {
+  return {
+    app: "SafeShot",
+    file: tNow("menu.file"),
+    open: tNow("menu.open"),
+    save: tNow("menu.save"),
+    edit: tNow("menu.edit"),
+    undo: tNow("menu.undo"),
+    redo: tNow("menu.redo"),
+    cut: tNow("menu.cut"),
+    copy: tNow("menu.copy"),
+    paste: tNow("menu.paste"),
+    selectAll: tNow("menu.selectAll"),
+    window: tNow("menu.window"),
+  };
+}
+
+// The macOS menu bar carries Open, Save, Undo and Redo back to the page, and follows the language.
+async function setUpMenu() {
+  await platform.setMenuLabels(menuLabels()).catch(() => undefined);
+  let lang = selectLang(useApp.getState());
+  useApp.subscribe((state) => {
+    const next = selectLang(state);
+    if (next === lang) return;
+    lang = next;
+    void platform.setMenuLabels(menuLabels()).catch(() => undefined);
+  });
+  await platform
+    .onMenuAction((action) => {
+      if (!firstOf(action)) return;
+      const doc = useDoc.getState();
+      if (action === "open") void openFromDialog();
+      else if (action === "save") void (doc.doc && saveResult());
+      else if (action === "undo") doc.undo();
+      else doc.redo();
+    })
+    .catch(() => undefined);
+}
 
 // Runs once per window, even when React mounts the tree twice in development.
 async function start() {
   await useApp.getState().hydrate();
+  await setUpMenu();
   if (!platform.hasGlobalShortcut) return;
   const { shortcut } = useApp.getState().settings;
   await platform

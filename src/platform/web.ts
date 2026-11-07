@@ -21,6 +21,8 @@ export const web: Platform = {
   registerShortcut: () => Promise.reject(new Error("no global shortcut in the browser")),
   unregisterShortcut: () => Promise.resolve(),
   bringToFront: () => Promise.resolve(),
+  setMenuLabels: () => Promise.resolve(),
+  onMenuAction: () => Promise.resolve(() => undefined),
   pickImages: () =>
     new Promise((resolve) => {
       const input = document.createElement("input");

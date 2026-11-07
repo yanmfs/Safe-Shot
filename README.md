@@ -70,7 +70,6 @@ pnpm test
 
 ## Roadmap
 
-- Menu nativo com Desfazer e Refazer.
 
 ## Contribuir
 
