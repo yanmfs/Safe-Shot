@@ -7,9 +7,15 @@ export interface Settings {
   language: LangSetting;
   theme: ThemeSetting;
   barColor: BarColor;
+  terms: string[];
 }
 
-export const defaultSettings: Settings = { language: "auto", theme: "system", barColor: "black" };
+export const defaultSettings: Settings = {
+  language: "auto",
+  theme: "system",
+  barColor: "black",
+  terms: [],
+};
 
 const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
   allowed.includes(value as T) ? (value as T) : fallback;
@@ -21,5 +27,8 @@ export function parseSettings(raw: unknown): Settings {
     language: pick(r.language, ["auto", "pt-BR", "en"], defaultSettings.language),
     theme: pick(r.theme, ["system", "light", "dark"], defaultSettings.theme),
     barColor: pick(r.barColor, ["black", "white", "gray"], defaultSettings.barColor),
+    terms: Array.isArray(r.terms)
+      ? r.terms.filter((t): t is string => typeof t === "string").slice(0, 200)
+      : [],
   };
 }

@@ -374,3 +374,28 @@ describe("previews", () => {
     expect(found?.preview).toBe("j•••@exemplo.com");
   });
 });
+
+describe("personal terms", () => {
+  const withTerms = (lines: string[], terms: string[]) =>
+    detect(pageFromLines(lines), { terms }).filter((d) => d.category === "term");
+
+  it("matches ignoring case and accents", () => {
+    expect(withTerms(["Reunião com a EMPRESA Exemplo hoje"], ["empresa"])).toHaveLength(1);
+    expect(withTerms(["Cliente: José"], ["jose"])).toHaveLength(1);
+  });
+
+  it("tolerates one mistake in words of five letters or more", () => {
+    expect(withTerms(["projeto Fenix confidencial"], ["Fênix"])).toHaveLength(1);
+    expect(withTerms(["projeto Fenox"], ["fenix"])).toHaveLength(1);
+    expect(withTerms(["casa"], ["caza"])).toHaveLength(0);
+  });
+
+  it("matches phrases and ignores unrelated words", () => {
+    expect(withTerms(["Obra do Parque das Flores segue"], ["parque das flores"])).toHaveLength(1);
+    expect(withTerms(["nada a ver aqui"], ["empresa", "x"])).toHaveLength(0);
+  });
+
+  it("does nothing without terms", () => {
+    expect(detect(pageFromLines(["empresa"]))).toEqual([]);
+  });
+});
