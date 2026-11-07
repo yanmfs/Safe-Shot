@@ -218,7 +218,15 @@ function level(distance: number): number {
  * and faded into the page. The fade happens in a margin outside the region, so every pixel inside it
  * is fully replaced and nothing of the original can show at the edge.
  */
-export function smudgeRect(image: Rgba, rect: Rect, tint: Rgb): void {
+// A tint close to the page's own tone would make the smudge vanish, so it flips to the other side
+// of the scale: dark on a light page, light on a dark one.
+function visibleTint(bg: Rgb, tint: Rgb): Rgb {
+  const bgLuma = luma(...bg);
+  if (Math.abs(luma(...tint) - bgLuma) >= 70) return tint;
+  return bgLuma < 128 ? [214, 219, 228] : [28, 32, 40];
+}
+
+export function smudgeRect(image: Rgba, rect: Rect, wantedTint: Rgb): void {
   const px = toPixelRect(rect, image.width, image.height);
   if (!px) return;
   const margin = Math.round(Math.max(3, px.h * 0.25));
@@ -230,6 +238,7 @@ export function smudgeRect(image: Rgba, rect: Rect, tint: Rgb): void {
   const h = y1 - y0;
   const bg = surroundings(image, { x: x0, y: y0, w, h });
   const bgLuma = luma(...bg);
+  const tint = visibleTint(bg, wantedTint);
 
   const tileW = Math.max(6, Math.round(px.h * 0.9));
   const tileH = h <= tileW * 2.5 ? h : tileW;

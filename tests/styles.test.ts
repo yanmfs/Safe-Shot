@@ -93,6 +93,25 @@ describe("smudge", () => {
   });
 });
 
+describe("smudge tint", () => {
+  it("stays visible on a dark page even when the bar colour is black", () => {
+    const image = page(200, 60, [22, 40, 30]);
+    for (let x = 40; x < 140; x += 6) {
+      for (let y = 22; y < 38; y++) image.data.set([240, 240, 240, 255], (y * 200 + x) * 4);
+    }
+    smudgeRect(image, area, [0, 0, 0]);
+    // lighter than the page, so it reads as a patch and not as a hole
+    expect(image.data[(30 * 200 + 90) * 4]!).toBeGreaterThan(40);
+  });
+
+  it("stays visible on a light page even when the bar colour is white", () => {
+    const image = withText();
+    smudgeRect(image, area, [255, 255, 255]);
+    expect(image.data[(30 * 200 + 90) * 4]!).toBeLessThan(245);
+    expect(verifySmooth(image, [area]).ok).toBe(true);
+  });
+});
+
 describe("paintStyled", () => {
   const marks: Mark[] = [{ rect: area, label: "CPF" }];
 
