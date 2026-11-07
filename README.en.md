@@ -44,7 +44,7 @@ xattr -cr /Applications/SafeShot.app
 
 ## What it does and does not do
 
-It reads the text in the image on your computer (Tesseract, Portuguese and English) and looks for CPF, CNPJ, RG and other document numbers found next to a keyword, PIS, CNS, phone numbers with a valid area code, e-mail, CEP, addresses, Pix keys and Pix copy-and-paste codes, cards (Luhn-checked), bank branch and account, license plates, birth dates, labelled names, IPs, known credential formats and URLs with secrets, QR codes and barcodes, plus your own list of terms to always hide. Export uses solid bars (black, white or gray), strips metadata and checks the pixels of the generated image before handing it over.
+It reads the text in the image on your computer (with the system's own reader, Vision on macOS and Windows OCR, and Tesseract in Portuguese and English as a fallback) and looks for CPF, CNPJ, RG and other document numbers found next to a keyword, PIS, CNS, phone numbers with a valid area code, e-mail, CEP, addresses, Pix keys and Pix copy-and-paste codes, cards (Luhn-checked), bank branch and account, license plates, birth dates, labelled names, IPs, known credential formats and URLs with secrets, QR codes and barcodes, plus your own list of terms to always hide. Export uses solid bars (black, white or gray), strips metadata and checks the pixels of the generated image before handing it over.
 
 It does not:
 
@@ -56,7 +56,7 @@ It does not:
 
 ## Privacy
 
-Nothing leaves your computer: OCR runs locally with files bundled in the app and the webview security policy blocks external connections. No image is written to disk beyond the export you ask for, there is no history, and logs never hold recognized text. To report a detection or privacy problem, see [SECURITY.md](SECURITY.md).
+Nothing leaves your computer: OCR runs locally (system reader or Tesseract, with files bundled in the app) and the webview security policy blocks external connections. No image is written to disk beyond the export you ask for, there is no history, and logs never hold recognized text. To report a detection or privacy problem, see [SECURITY.md](SECURITY.md).
 
 ## Run locally
 
@@ -70,7 +70,6 @@ pnpm test
 
 ## Roadmap
 
-- Native OCR (Vision on macOS, Windows.Media.Ocr) as an alternative to Tesseract.
 - Native menu with Undo and Redo.
 
 ## Contributing

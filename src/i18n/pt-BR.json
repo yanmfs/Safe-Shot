@@ -103,5 +103,9 @@
   "settings.formatHelp": "Copiar para a área de transferência sempre usa PNG. No JPEG as tarjas crescem até blocos de 16 pixels, para a compressão não deixar rastro do que está embaixo.",
   "sidebar.qrWarning": "Pode conter dados, como cartão de embarque ou Pix.",
   "queue.position": "Imagem {n} de {total}",
-  "queue.next": "Próxima ({count} na fila)"
+  "queue.next": "Próxima ({count} na fila)",
+  "settings.ocr": "Leitor de texto",
+  "settings.ocr.auto": "Automático (o do sistema, se houver)",
+  "settings.ocr.tesseract": "Sempre Tesseract",
+  "settings.ocrHelp": "O leitor do sistema (Vision no Mac, OCR do Windows) é mais rápido. Se falhar, o SafeShot lê de novo com o Tesseract. Nos dois casos a imagem não sai do computador."
 }

@@ -9,6 +9,8 @@ export interface Settings {
   theme: ThemeSetting;
   barColor: BarColor;
   terms: string[];
+  // "auto" uses the reader built into the system when there is one, and Tesseract otherwise.
+  ocrEngine: "auto" | "tesseract";
   // Accelerator that opens the clipboard image; "" until the first run picks the OS default.
   shortcut: string;
   // The format of the exported file: PNG is lossless, JPEG is smaller for photos.
@@ -22,6 +24,7 @@ export const defaultSettings: Settings = {
   theme: "system",
   barColor: "black",
   terms: [],
+  ocrEngine: "auto",
   shortcut: "",
   format: "png",
 };
@@ -41,6 +44,7 @@ export function parseSettings(raw: unknown, os: Os = "windows"): Settings {
       : [],
     shortcut:
       typeof r.shortcut === "string" && r.shortcut !== "" ? r.shortcut : defaultShortcut(os),
+    ocrEngine: pick(r.ocrEngine, ["auto", "tesseract"], defaultSettings.ocrEngine),
     format: pick(r.format, ["png", "jpeg"], defaultSettings.format),
   };
 }
