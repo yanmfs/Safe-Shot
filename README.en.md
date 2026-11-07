@@ -32,6 +32,14 @@ Hide CPF, phone numbers, e-mail, Pix keys and other sensitive data in screenshot
 
 Before sending a screenshot I used to open an editor and cross everything out by hand, and sometimes I missed something or used a blur that can be reversed. SafeShot finds the data on its own, including the Brazilian kinds that foreign tools do not know, and exports a copy with solid bars and no metadata.
 
+## Install with Homebrew (macOS)
+
+```sh
+brew install --cask yanmfs/tap/safeshot
+```
+
+This installs the same universal macOS app provided in Releases, for Apple Silicon and Intel. Update with `brew update` followed by `brew upgrade --cask yanmfs/tap/safeshot`. See **First launch** below if macOS asks you to confirm opening the app.
+
 ## Download
 
 Get the installer from the [Releases](../../releases) page:

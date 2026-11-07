@@ -32,6 +32,16 @@ Esconda CPF, telefone, e-mail, chave Pix e outros dados sensíveis em prints ant
 
 Antes de mandar um print eu abria um editor e riscava tudo na mão, e às vezes esquecia alguma coisa ou usava um desfoque que dá para reverter. O SafeShot acha os dados sozinho, inclusive os brasileiros que ferramentas estrangeiras não conhecem, e exporta uma cópia com tarjas sólidas e sem metadados.
 
+## Instalar pelo Homebrew (macOS)
+
+```sh
+brew install --cask yanmfs/tap/safeshot
+```
+
+O Homebrew baixa o mesmo instalador da release e coloca o SafeShot em Aplicativos. É a versão universal, para Apple Silicon e Intel. Para atualizar, rode `brew update` e `brew upgrade --cask yanmfs/tap/safeshot`.
+
+Se o macOS pedir confirmação na primeira abertura, veja a seção **Primeira abertura** abaixo. Mais detalhes em [instalação pelo Homebrew](docs/instalacao-homebrew.md).
+
 ## Download
 
 Baixe o instalador na página de [Releases](../../releases):
