@@ -4,8 +4,9 @@ import { Button } from "./components/Button";
 import { Logo } from "./components/Logo";
 import { Toaster } from "./components/Toaster";
 import { Tooltip, TooltipProvider } from "./components/Tooltip";
-import { Copy, Download } from "lucide-react";
+import { Copy, Download, SkipForward } from "lucide-react";
 import { modKeyLabel } from "./core/os";
+import { place } from "./core/queue";
 import {
   copyResult,
   openFromDialog,
@@ -47,6 +48,7 @@ export default function App() {
   const ready = useApp((s) => s.ready);
   const setDialog = useApp((s) => s.setDialog);
   const status = useDoc((s) => s.status);
+  const queue = useDoc((s) => s.queue);
   const progress = useDoc((s) => s.progress);
   const ocrFailed = useDoc((s) => s.ocrFailed);
   const openFailed = useDoc((s) => s.openFailed);
@@ -167,13 +169,26 @@ export default function App() {
         )}
 
         <footer className="flex h-14 shrink-0 items-center justify-between gap-3 border-t border-border bg-surface px-4">
-          <p className="text-xs text-muted">{t("notice.review")}</p>
+          <p className="text-xs text-muted">
+            {queue && (
+              <span className="mr-2 font-medium text-text">
+                {t("queue.position", { n: place(queue), total: queue.total })}
+              </span>
+            )}
+            {t("notice.review")}
+          </p>
           {hasDoc && (
             <div className="flex items-center gap-2">
               <Button variant="ghost" onClick={reset}>
                 <FilePlus2 className="size-4" aria-hidden />
                 {t("action.new")}
               </Button>
+              {queue && queue.pending.length > 0 && (
+                <Button disabled={busy} onClick={() => void useDoc.getState().nextInQueue()}>
+                  <SkipForward className="size-4" aria-hidden />
+                  {t("queue.next", { count: queue.pending.length })}
+                </Button>
+              )}
               <Tooltip label={t("action.save")} hint={`${mod}+S`}>
                 <Button disabled={busy} onClick={() => void saveResult()}>
                   <Download className="size-4" aria-hidden />

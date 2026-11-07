@@ -35,11 +35,12 @@ xattr -cr /Applications/SafeShot.app
 
 ## How to use
 
-1. Drop a screenshot on the window, paste it with `Ctrl/⌘+V` or open a file (PNG, JPG, WEBP, BMP, GIF; HEIC on macOS). You can also take the screenshot to the clipboard and press the global shortcut (`Ctrl+Alt+Shift+S` on Windows, `⌃⌥⌘S` on macOS): SafeShot opens with the image and starts reading it.
+1. Drop one or more screenshots on the window, paste with `Ctrl/⌘+V` or open files (PNG, JPG, WEBP, BMP, GIF; HEIC on macOS). You can also take the screenshot to the clipboard and press the global shortcut (`Ctrl+Alt+Shift+S` on Windows, `⌃⌥⌘S` on macOS): SafeShot opens with the image and starts reading it.
 2. Wait for the text reading (a few seconds). Findings show up on the image and in the list, already marked to hide.
 3. Review: untick what you want to keep, click any word to hide it, or draw rectangles with `R`.
 4. Copy with `Ctrl/⌘+C` or save with `Ctrl/⌘+S`. The saved file is named `<original>-safeshot.png` (or `.jpg` if you pick JPEG in the settings); the original is never changed.
 5. Check the image before sending. Holding `Alt` shows the original for comparison.
+6. With several files, "Next" moves to the next image in line; each one is reviewed and exported on its own.
 
 ## What it does and does not do
 
@@ -69,7 +70,6 @@ pnpm test
 
 ## Roadmap
 
-- A queue of several images.
 - Native OCR (Vision on macOS, Windows.Media.Ocr) as an alternative to Tesseract.
 - Native menu with Undo and Redo.
 

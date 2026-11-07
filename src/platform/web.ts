@@ -21,16 +21,14 @@ export const web: Platform = {
   registerShortcut: () => Promise.reject(new Error("no global shortcut in the browser")),
   unregisterShortcut: () => Promise.resolve(),
   bringToFront: () => Promise.resolve(),
-  pickImage: () =>
+  pickImages: () =>
     new Promise((resolve) => {
       const input = document.createElement("input");
       input.type = "file";
+      input.multiple = true;
       input.accept = "image/png,image/jpeg,image/webp,image/bmp,image/gif";
-      input.onchange = () => {
-        const file = input.files?.[0];
-        resolve(file ? fromFile(file) : null);
-      };
-      input.oncancel = () => resolve(null);
+      input.onchange = () => resolve(Promise.all([...(input.files ?? [])].map(fromFile)));
+      input.oncancel = () => resolve([]);
       input.click();
     }),
   readClipboardImage: async () => {

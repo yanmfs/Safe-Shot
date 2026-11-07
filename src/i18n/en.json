@@ -101,5 +101,7 @@
   "settings.format.png": "PNG (lossless)",
   "settings.format.jpeg": "JPEG (smaller, for photos)",
   "settings.formatHelp": "Copying to the clipboard always uses PNG. In JPEG the bars grow to 16-pixel blocks so compression leaves no trace of what is underneath.",
-  "sidebar.qrWarning": "May hold data, like a boarding pass or a Pix payment."
+  "sidebar.qrWarning": "May hold data, like a boarding pass or a Pix payment.",
+  "queue.position": "Image {n} of {total}",
+  "queue.next": "Next ({count} in line)"
 }

@@ -47,12 +47,12 @@ export const tauri: Platform = {
     await win.unminimize();
     await win.setFocus();
   },
-  pickImage: async () => {
-    const path = await open({
-      multiple: false,
+  pickImages: async () => {
+    const paths = await open({
+      multiple: true,
       filters: [{ name: "Images", extensions: IMAGE_EXTENSIONS }],
     });
-    return typeof path === "string" ? readFromDisk(path) : null;
+    return Array.isArray(paths) ? Promise.all(paths.map(readFromDisk)) : [];
   },
   readClipboardImage: async () => {
     try {

@@ -53,8 +53,8 @@ export async function saveResult(): Promise<void> {
 }
 
 export async function openFromDialog(): Promise<void> {
-  const image = await platform.pickImage().catch(() => null);
-  if (image) await useDoc.getState().open(image);
+  const images = await platform.pickImages().catch(() => []);
+  await useDoc.getState().openMany(images);
 }
 
 export async function pasteFromClipboard(): Promise<void> {

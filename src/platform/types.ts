@@ -24,7 +24,7 @@ export interface Platform {
   unregisterShortcut(accelerator: string): Promise<void>;
   // Shows and focuses the window, for when the shortcut fires while it is hidden or behind others.
   bringToFront(): Promise<void>;
-  pickImage(): Promise<LoadedImage | null>;
+  pickImages(): Promise<LoadedImage[]>;
   readClipboardImage(): Promise<LoadedImage | null>;
   copyImage(png: Uint8Array): Promise<void>;
   // Resolves false when the person cancels the dialog.
