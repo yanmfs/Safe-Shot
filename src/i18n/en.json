@@ -107,5 +107,16 @@
   "settings.ocr": "Text reader",
   "settings.ocr.auto": "Automatic (the system's, if there is one)",
   "settings.ocr.tesseract": "Always Tesseract",
-  "settings.ocrHelp": "The system reader (Vision on Mac, Windows OCR) is faster. If it fails, SafeShot reads again with Tesseract. Either way the image never leaves the computer."
+  "settings.ocrHelp": "The system reader (Vision on Mac, Windows OCR) is faster. If it fails, SafeShot reads again with Tesseract. Either way the image never leaves the computer.",
+  "menu.file": "File",
+  "menu.open": "Open…",
+  "menu.save": "Save…",
+  "menu.edit": "Edit",
+  "menu.undo": "Undo",
+  "menu.redo": "Redo",
+  "menu.cut": "Cut",
+  "menu.copy": "Copy",
+  "menu.paste": "Paste",
+  "menu.selectAll": "Select All",
+  "menu.window": "Window"
 }

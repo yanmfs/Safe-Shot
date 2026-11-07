@@ -1,4 +1,5 @@
 mod images;
+mod menu;
 mod native_ocr;
 
 use tauri::Manager;
@@ -21,8 +22,10 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             images::read_image_file,
             images::save_image_file,
+            menu::set_menu_labels,
             native_ocr::native_ocr
         ])
+        .on_menu_event(menu::on_event)
         .run(tauri::generate_context!())
         .expect("error while running SafeShot");
 }

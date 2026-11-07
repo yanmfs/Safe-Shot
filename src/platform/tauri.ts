@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { readImage, writeImage } from "@tauri-apps/plugin-clipboard-manager";
@@ -8,7 +9,7 @@ import { openUrl } from "@tauri-apps/plugin-opener";
 import { load, type Store } from "@tauri-apps/plugin-store";
 import type { OcrPage } from "../core/detect";
 import { detectOs } from "../core/os";
-import { SaveRefusedError, type LoadedImage, type Platform } from "./types";
+import { SaveRefusedError, type LoadedImage, type MenuAction, type Platform } from "./types";
 
 const IMAGE_EXTENSIONS = ["png", "jpg", "jpeg", "webp", "bmp", "gif", "heic", "heif"];
 
@@ -49,6 +50,8 @@ export const tauri: Platform = {
     await win.setFocus();
   },
   nativeOcr: (png) => invoke<OcrPage>("native_ocr", png),
+  setMenuLabels: (labels) => invoke("set_menu_labels", { labels }),
+  onMenuAction: (handler) => listen<MenuAction>("menu-action", (e) => handler(e.payload)),
   pickImages: async () => {
     const paths = await open({
       multiple: true,

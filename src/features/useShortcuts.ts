@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { copyResult, openFromDialog, saveResult } from "./doc/actions";
 import { useDoc } from "./doc/store";
+import { firstOf } from "./actionGuard";
 import { useView } from "./viewer/view";
 
 const isTyping = (e: KeyboardEvent) =>
@@ -16,24 +17,30 @@ export function useShortcuts() {
 
       if (mod && key === "z") {
         e.preventDefault();
-        return e.shiftKey ? doc.redo() : doc.undo();
+        const action = e.shiftKey ? "redo" : "undo";
+        if (firstOf(action)) doc[action]();
+        return;
       }
       if (mod && key === "y") {
         e.preventDefault();
-        return doc.redo();
+        if (firstOf("redo")) doc.redo();
+        return;
       }
       if (mod && key === "o") {
         e.preventDefault();
-        return void openFromDialog();
+        if (firstOf("open")) void openFromDialog();
+        return;
       }
       if (!doc.doc) return;
       if (mod && key === "c") {
         e.preventDefault();
-        return void copyResult();
+        if (firstOf("copy")) void copyResult();
+        return;
       }
       if (mod && key === "s") {
         e.preventDefault();
-        return void saveResult();
+        if (firstOf("save")) void saveResult();
+        return;
       }
       if (mod && key === "0") {
         e.preventDefault();
@@ -50,7 +57,19 @@ export function useShortcuts() {
         doc.removeMark(doc.selectedMark);
       else if (key === "escape") doc.selectMark(null);
     };
+    // On macOS the Copy item of the menu fires this instead of a key press. Text the person
+    // selected, or typed into a field, keeps the normal copy.
+    const onCopy = (e: ClipboardEvent) => {
+      if (e.target instanceof HTMLElement && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+      if ((window.getSelection()?.toString() ?? "") !== "" || !useDoc.getState().doc) return;
+      e.preventDefault();
+      if (firstOf("copy")) void copyResult();
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("copy", onCopy);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("copy", onCopy);
+    };
   }, []);
 }

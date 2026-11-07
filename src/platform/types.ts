@@ -11,6 +11,23 @@ export interface LoadedImage {
   path?: string;
 }
 
+export type MenuAction = "open" | "save" | "undo" | "redo";
+
+export interface MenuLabels {
+  app: string;
+  file: string;
+  open: string;
+  save: string;
+  edit: string;
+  undo: string;
+  redo: string;
+  cut: string;
+  copy: string;
+  paste: string;
+  selectAll: string;
+  window: string;
+}
+
 export interface DropHandlers {
   hover: (over: boolean) => void;
   images: (images: LoadedImage[]) => void;
@@ -27,6 +44,9 @@ export interface Platform {
   bringToFront(): Promise<void>;
   // Missing in the browser demo; the installed app has the reader of the system.
   nativeOcr?: (png: Uint8Array) => Promise<OcrPage>;
+  // The macOS menu bar; the page gets its actions back through `onMenuAction`.
+  setMenuLabels(labels: MenuLabels): Promise<void>;
+  onMenuAction(handler: (action: MenuAction) => void): Promise<Unlisten>;
   pickImages(): Promise<LoadedImage[]>;
   readClipboardImage(): Promise<LoadedImage | null>;
   copyImage(png: Uint8Array): Promise<void>;

@@ -70,7 +70,6 @@ pnpm test
 
 ## Roadmap
 
-- Native menu with Undo and Redo.
 
 ## Contributing
 

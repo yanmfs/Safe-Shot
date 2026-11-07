@@ -107,5 +107,16 @@
   "settings.ocr": "Leitor de texto",
   "settings.ocr.auto": "Automático (o do sistema, se houver)",
   "settings.ocr.tesseract": "Sempre Tesseract",
-  "settings.ocrHelp": "O leitor do sistema (Vision no Mac, OCR do Windows) é mais rápido. Se falhar, o SafeShot lê de novo com o Tesseract. Nos dois casos a imagem não sai do computador."
+  "settings.ocrHelp": "O leitor do sistema (Vision no Mac, OCR do Windows) é mais rápido. Se falhar, o SafeShot lê de novo com o Tesseract. Nos dois casos a imagem não sai do computador.",
+  "menu.file": "Arquivo",
+  "menu.open": "Abrir…",
+  "menu.save": "Salvar…",
+  "menu.edit": "Editar",
+  "menu.undo": "Desfazer",
+  "menu.redo": "Refazer",
+  "menu.cut": "Recortar",
+  "menu.copy": "Copiar",
+  "menu.paste": "Colar",
+  "menu.selectAll": "Selecionar tudo",
+  "menu.window": "Janela"
 }
