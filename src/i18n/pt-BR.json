@@ -5,7 +5,7 @@
   "header.settings": "Configurações",
   "header.about": "Sobre",
   "empty.title": "Arraste um print aqui",
-  "empty.hint": "Ou cole com {paste}, ou abra um arquivo. O SafeShot procura CPF, telefone, e-mail, chave Pix e outros dados no próprio computador.",
+  "empty.hint": "Arraste a imagem para cá, cole com {paste} ou abra um arquivo. Tudo é lido no seu computador.",
   "empty.open": "Abrir imagem",
   "empty.paste": "Colar da área de transferência",
   "empty.brazil": "Feito para dados brasileiros: CPF, CNPJ (inclusive o alfanumérico), RG, chave Pix, placa, CEP, DDD.",
@@ -128,5 +128,10 @@
   "style.smudge": "Borrado",
   "style.solid.hint": "Cobre com uma cor única. É o jeito mais seguro: não sobra nada.",
   "style.labelled.hint": "Tarja que diz o que há embaixo (CPF, Telefone…). Bom para quem vai ler.",
-  "style.smudge.hint": "Borrão suave, sem letras. O SafeShot lê de novo o resultado e troca por tarja o que ainda der para ler."
+  "style.smudge.hint": "Borrão suave, sem letras. O SafeShot lê de novo o resultado e troca por tarja o que ainda der para ler.",
+  "empty.headline": "Esconda dados sensíveis antes de mandar o print",
+  "empty.step1": "Traga o print. Pode ser vários de uma vez.",
+  "empty.step2": "Revise o que foi achado e ajuste à mão.",
+  "empty.step3": "Copie e cole direto no chat ou no e-mail.",
+  "empty.finds": "Procura:"
 }
