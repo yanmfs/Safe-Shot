@@ -36,21 +36,22 @@ xattr -cr /Applications/SafeShot.app
 
 ## How to use
 
-1. Drop a screenshot on the window, paste it with `Ctrl/⌘+V` or open a file (PNG, JPG, WEBP, BMP, GIF; HEIC on macOS).
+1. Drop a screenshot on the window, paste it with `Ctrl/⌘+V` or open a file (PNG, JPG, WEBP, BMP, GIF; HEIC on macOS). You can also take the screenshot to the clipboard and press the global shortcut (`Ctrl+Alt+Shift+S` on Windows, `⌃⌥⌘S` on macOS): SafeShot opens with the image and starts reading it.
 2. Wait for the text reading (a few seconds). Findings show up on the image and in the list, already marked to hide.
 3. Review: untick what you want to keep, click any word to hide it, or draw rectangles with `R`.
-4. Copy with `Ctrl/⌘+C` or save with `Ctrl/⌘+S`. The saved file is named `<original>-safeshot.png`; the original is never changed.
+4. Copy with `Ctrl/⌘+C` or save with `Ctrl/⌘+S`. The saved file is named `<original>-safeshot.png` (or `.jpg` if you pick JPEG in the settings); the original is never changed.
 5. Check the image before sending. Holding `Alt` shows the original for comparison.
 
 ## What it does and does not do
 
-It reads the text in the image on your computer (Tesseract, Portuguese and English) and looks for CPF, CNPJ, RG and other document numbers found next to a keyword, PIS, CNS, phone numbers with a valid area code, e-mail, CEP, addresses, Pix keys and Pix copy-and-paste codes, cards (Luhn-checked), bank branch and account, license plates, birth dates, labelled names, IPs, known credential formats and URLs with secrets, plus your own list of terms to always hide. Export uses solid bars (black, white or gray), strips metadata and checks the pixels of the generated image before handing it over.
+It reads the text in the image on your computer (Tesseract, Portuguese and English) and looks for CPF, CNPJ, RG and other document numbers found next to a keyword, PIS, CNS, phone numbers with a valid area code, e-mail, CEP, addresses, Pix keys and Pix copy-and-paste codes, cards (Luhn-checked), bank branch and account, license plates, birth dates, labelled names, IPs, known credential formats and URLs with secrets, QR codes and barcodes, plus your own list of terms to always hide. Export uses solid bars (black, white or gray), strips metadata and checks the pixels of the generated image before handing it over.
 
 It does not:
 
 - Guarantee it finds everything. OCR struggles with very small text, noisy backgrounds or decorative fonts, and medium-confidence items show a "Check" tag. The final call is yours.
 - Offer blur or pixelation, on purpose: both can be partly reversed.
-- Read QR codes or barcodes yet.
+- Read what a QR code says. It covers the whole code instead, and marks it to hide because a QR can hold data like a boarding pass or a Pix payment.
+- Make JPEG as precise as PNG: in JPEG the bars grow to 16-pixel blocks so compression leaves no trace of what is underneath. For text, prefer PNG.
 - Detect faces or information that is not text.
 
 ## Privacy
@@ -69,9 +70,7 @@ pnpm test
 
 ## Roadmap
 
-- Global shortcut that opens SafeShot with the clipboard image.
-- QR code and barcode reading.
-- JPEG export and a queue of several images.
+- A queue of several images.
 - Native OCR (Vision on macOS, Windows.Media.Ocr) as an alternative to Tesseract.
 - Native menu with Undo and Redo.
 

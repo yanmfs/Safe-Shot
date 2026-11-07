@@ -36,21 +36,22 @@ xattr -cr /Applications/SafeShot.app
 
 ## Como usar
 
-1. Arraste um print para a janela, cole com `Ctrl/⌘+V` ou abra um arquivo (PNG, JPG, WEBP, BMP, GIF; HEIC no macOS).
+1. Arraste um print para a janela, cole com `Ctrl/⌘+V` ou abra um arquivo (PNG, JPG, WEBP, BMP, GIF; HEIC no macOS). Também dá para tirar o print para a área de transferência e apertar o atalho global (`Ctrl+Alt+Shift+S` no Windows, `⌃⌥⌘S` no macOS): o SafeShot abre com a imagem e já começa a leitura.
 2. Espere a leitura do texto (alguns segundos). Os dados achados aparecem na imagem e na lista, já marcados para ocultar.
 3. Revise: desmarque o que quiser manter, clique em qualquer palavra para ocultá-la, ou desenhe retângulos com `R`.
-4. Copie com `Ctrl/⌘+C` ou salve com `Ctrl/⌘+S`. O arquivo salvo se chama `<original>-safeshot.png`; o original nunca é alterado.
+4. Copie com `Ctrl/⌘+C` ou salve com `Ctrl/⌘+S`. O arquivo salvo se chama `<original>-safeshot.png` (ou `.jpg`, se você escolher JPEG nas configurações); o original nunca é alterado.
 5. Confira a imagem antes de enviar. Segurar `Alt` mostra o original para comparar.
 
 ## O que ele faz e o que não faz
 
-Faz: lê o texto da imagem no seu computador (Tesseract, português e inglês), procura CPF, CNPJ, RG e outros documentos com número de contexto, PIS, CNS, telefone com DDD válido, e-mail, CEP, endereço, chave Pix e Pix copia e cola, cartão (com verificação Luhn), agência e conta, placa, data de nascimento, nome rotulado, IP, credenciais conhecidas e URLs com segredo, além de uma lista sua de termos para sempre ocultar. A exportação usa tarja sólida (preta, branca ou cinza), apaga metadados e confere os pixels da imagem gerada antes de entregá-la.
+Faz: lê o texto da imagem no seu computador (Tesseract, português e inglês), procura CPF, CNPJ, RG e outros documentos com número de contexto, PIS, CNS, telefone com DDD válido, e-mail, CEP, endereço, chave Pix e Pix copia e cola, cartão (com verificação Luhn), agência e conta, placa, data de nascimento, nome rotulado, IP, credenciais conhecidas e URLs com segredo, QR Codes e códigos de barras, além de uma lista sua de termos para sempre ocultar. A exportação usa tarja sólida (preta, branca ou cinza), apaga metadados e confere os pixels da imagem gerada antes de entregá-la.
 
 Não faz:
 
 - Não garante achar tudo. O OCR erra em letra muito pequena, fundo com ruído ou fonte decorativa, e itens com confiança média aparecem como "Confira". A decisão final é sua.
 - Não tem desfoque nem pixelização, de propósito: os dois podem ser parcialmente revertidos.
-- Não lê QR Code nem código de barras ainda.
+- Cobre o QR Code inteiro, mas não diz o que ele contém: um QR pode guardar dados como cartão de embarque ou Pix, por isso o item vem marcado para ocultar.
+- No JPEG as tarjas crescem até blocos de 16 pixels, para a compressão não deixar rastro do que está embaixo. Para texto, prefira PNG.
 - Não detecta rostos nem informações que não estão em texto.
 
 ## Privacidade
@@ -69,9 +70,7 @@ pnpm test
 
 ## Roadmap
 
-- Atalho global que abre o SafeShot com a imagem da área de transferência.
-- Leitura de QR Code e código de barras.
-- Exportar em JPEG e fila de várias imagens.
+- Fila de várias imagens.
 - OCR nativo (Vision no macOS, Windows.Media.Ocr) como alternativa ao Tesseract.
 - Menu nativo com Desfazer e Refazer.
 
