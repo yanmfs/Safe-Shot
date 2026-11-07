@@ -5,7 +5,7 @@
   "header.settings": "Settings",
   "header.about": "About",
   "empty.title": "Drop a screenshot here",
-  "empty.hint": "Or paste with {paste}, or open a file. SafeShot looks for CPF, phone numbers, e-mail, Pix keys and more on your own computer.",
+  "empty.hint": "Drop the image here, paste it with {paste} or open a file. Everything is read on your computer.",
   "empty.open": "Open image",
   "empty.paste": "Paste from clipboard",
   "empty.brazil": "Built for Brazilian data: CPF, CNPJ (including the alphanumeric one), RG, Pix key, license plate, CEP, area code.",
@@ -128,5 +128,10 @@
   "style.smudge": "Smudge",
   "style.solid.hint": "Covers with one flat colour. The safest way: nothing is left.",
   "style.labelled.hint": "A bar that says what is underneath (CPF, Phone…). Good for the person who will read it.",
-  "style.smudge.hint": "A soft smudge with no letters. SafeShot reads the result again and turns whatever can still be read into a bar."
+  "style.smudge.hint": "A soft smudge with no letters. SafeShot reads the result again and turns whatever can still be read into a bar.",
+  "empty.headline": "Hide sensitive data before you send the screenshot",
+  "empty.step1": "Bring the screenshot. Several at once is fine.",
+  "empty.step2": "Review what was found and adjust by hand.",
+  "empty.step3": "Copy and paste straight into the chat or e-mail.",
+  "empty.finds": "Looks for:"
 }

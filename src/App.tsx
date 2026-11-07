@@ -119,7 +119,7 @@ export default function App() {
         <header className="flex h-12 shrink-0 items-center justify-between bg-[#111316] px-4 text-[#eceff1]">
           <div className="flex items-center gap-2.5">
             <Logo />
-            <span className="font-semibold">SafeShot</span>
+            <span className="font-display text-[17px] font-semibold tracking-tight">SafeShot</span>
           </div>
           <div className="flex items-center gap-1 text-[#eceff1]">
             <Tooltip label={t("header.open")} hint={`${mod}+O`}>
