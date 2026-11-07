@@ -62,7 +62,7 @@ describe.skipIf(names.length === 0)("OCR recall on generated screens", () => {
   beforeAll(() => {
     const target = copyOcrAssets();
     engine = createTesseractEngine({
-      paths: { langPath: join(target, "lang") } as never,
+      paths: { langPath: join(target, "lang") },
       encode: (image) => {
         const png = new PNG({ width: image.width, height: image.height });
         png.data = Buffer.from(image.data);
@@ -79,7 +79,6 @@ describe.skipIf(names.length === 0)("OCR recall on generated screens", () => {
       const total = runs.reduce((a, r) => a + r.total, 0);
       return `${category.padEnd(12)} ${found}/${total}`;
     });
-    // eslint-disable-next-line no-console
     console.log(
       `\nRecall by category (psm ${process.env.PSM ?? "11"})\n${rows.join("\n")}\n${perFile.join("\n")}`,
     );

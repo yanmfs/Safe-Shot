@@ -1,13 +1,13 @@
-import { createWorker, type ImageLike, type Worker } from "tesseract.js";
+import { createWorker, PSM, type ImageLike, type Worker } from "tesseract.js";
 import { prepareForOcr, toOriginalCoordinates } from "../core/ocr-prep";
 import type { Rgba } from "../core/redact";
 import { pageFromBlocks } from "./convert";
 import type { OcrEngine } from "./types";
 
 export interface TesseractPaths {
-  workerPath: string;
-  corePath: string;
-  langPath: string;
+  workerPath?: string;
+  corePath?: string;
+  langPath?: string;
 }
 
 export interface TesseractConfig {
@@ -35,7 +35,7 @@ export function createTesseractEngine({
       },
     });
     await w.setParameters({
-      tessedit_pageseg_mode: pageSegMode as never,
+      tessedit_pageseg_mode: pageSegMode === "3" ? PSM.AUTO : PSM.SPARSE_TEXT,
       preserve_interword_spaces: "1",
       user_defined_dpi: "300",
     });
