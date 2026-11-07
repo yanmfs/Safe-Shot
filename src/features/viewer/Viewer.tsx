@@ -2,8 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Box } from "../../core/detect";
 import { BAR_RGB } from "../../core/redact";
 import { useApp, useT } from "../../store";
+import { bitmapToRgba } from "../doc/image";
+import { renderMarks } from "../doc/render";
 import { CATEGORY_COLOR } from "../categories";
-import { useDoc } from "../doc/store";
+import { activeMarks, useDoc } from "../doc/store";
 import { useView } from "./view";
 
 const rectProps = (b: Box) => ({ x: b.x, y: b.y, width: b.w, height: b.h });
@@ -20,10 +22,12 @@ export function Viewer() {
   const selected = useDoc((s) => s.selectedMark);
   const { toggleWordAt, addManual, selectMark } = useDoc.getState();
   const barColor = useApp((s) => s.settings.barColor);
+  const redactStyle = useApp((s) => s.settings.redactStyle);
   const { zoom, x, y, fitting } = useView();
 
   const container = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
+  const preview = useRef<HTMLCanvasElement>(null);
   const [space, setSpace] = useState(false);
   const [alt, setAlt] = useState(false);
   const [draft, setDraft] = useState<Box | null>(null);
@@ -104,6 +108,29 @@ export function Viewer() {
     };
   }, []);
 
+  // The labelled and smudged styles are drawn by the same code that exports, so the preview is exact.
+  const base = useMemo(() => (doc ? bitmapToRgba(doc.bitmap) : null), [doc]);
+  useEffect(() => {
+    const target = preview.current;
+    const ctx = target?.getContext("2d");
+    if (!target || !ctx || !base) return;
+    const marks = activeMarks(detections, edit, (c) => t(`cat.${c}`).toUpperCase());
+    if (redactStyle === "solid" || marks.length === 0) {
+      ctx.clearRect(0, 0, target.width, target.height);
+      return;
+    }
+    const frame = requestAnimationFrame(() => {
+      const copy = {
+        data: new Uint8ClampedArray(base.data),
+        width: base.width,
+        height: base.height,
+      };
+      renderMarks(copy, marks, redactStyle, barColor);
+      ctx.putImageData(new ImageData(copy.data, copy.width, copy.height), 0, 0);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [base, detections, edit, redactStyle, barColor, t]);
+
   const words = useMemo(
     () =>
       (page?.lines ?? []).flatMap((line) => {
@@ -168,7 +195,7 @@ export function Viewer() {
   };
 
   const off = new Set(edit.off);
-  const fill = barFill(barColor);
+  const fill = redactStyle === "solid" ? barFill(barColor) : "none";
   const cursor = space ? "grab" : tool === "rect" ? "crosshair" : "default";
 
   return (
@@ -199,6 +226,20 @@ export function Viewer() {
           width={doc.width}
           height={doc.height}
           style={{ width: doc.width, height: doc.height, display: "block" }}
+        />
+        <canvas
+          ref={preview}
+          width={doc.width}
+          height={doc.height}
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: doc.width,
+            height: doc.height,
+            pointerEvents: "none",
+            opacity: alt ? 0 : 1,
+          }}
         />
         <svg
           viewBox={`0 0 ${doc.width} ${doc.height}`}

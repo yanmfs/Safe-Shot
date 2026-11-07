@@ -1,14 +1,19 @@
 import {
   alignRects,
+  BAR_RGB,
   endsAtEoi,
   endsAtIend,
   paintBars,
   verifyBars,
+  verifySmooth,
+  verifyTwoColours,
   type BarColor,
-  type Rect,
+  type Mark,
+  type RedactStyle,
   type Rgba,
 } from "../../core/redact";
 import { bitmapToRgba } from "./image";
+import { inkFor, renderMarks } from "./render";
 
 export class VerificationError extends Error {}
 
@@ -34,22 +39,66 @@ async function decodePng(png: Uint8Array): Promise<Rgba> {
   }
 }
 
-// The exported file is decoded again and checked before anyone gets it: every pixel under a bar
-// must be the bar colour, and nothing may trail the IEND chunk.
+export interface ExportOptions {
+  style: RedactStyle;
+  color: BarColor;
+  // Called for the smudge style with the finished picture. It returns the indexes of marks whose data
+  // can still be read; those are covered with solid bars before the file is written.
+  recheck?: (image: Rgba, marks: Mark[]) => Promise<number[]>;
+}
+
+export interface Exported {
+  bytes: Uint8Array;
+  // Marks that could still be read after smudging and were turned into solid bars.
+  hardened: number;
+}
+
+// Smudged marks that a second reading can still make out become solid bars, so a smudge never
+// ships a leak. Returns how many had to change.
+async function harden(image: Rgba, marks: Mark[], options: ExportOptions): Promise<number> {
+  if (options.style !== "smudge" || !options.recheck) return 0;
+  const leaking = await options.recheck(image, marks);
+  paintBars(
+    image,
+    leaking.flatMap((i) => (marks[i] ? [marks[i].rect] : [])),
+    options.color,
+  );
+  return leaking.length;
+}
+
+function verify(decoded: Rgba, marks: Mark[], options: ExportOptions, tolerance: number) {
+  const rects = marks.map((m) => m.rect);
+  if (options.style === "smudge") return verifySmooth(decoded, rects, tolerance > 0 ? 120 : 95);
+  if (options.style === "label") {
+    return verifyTwoColours(
+      decoded,
+      rects,
+      BAR_RGB[options.color],
+      inkFor(options.color),
+      tolerance,
+    );
+  }
+  return verifyBars(decoded, rects, options.color, tolerance);
+}
+
+// The exported file is decoded again and checked before anyone gets it: what is under each mark must
+// be what the style promises, and nothing may trail the end of the file.
 export async function exportRedacted(
   source: ImageBitmap,
-  rects: Rect[],
-  color: BarColor,
-): Promise<Uint8Array> {
+  marks: Mark[],
+  options: ExportOptions,
+): Promise<Exported> {
   const image = bitmapToRgba(source);
-  paintBars(image, rects, color);
+  renderMarks(image, marks, options.style, options.color);
+  const hardened = await harden(image, marks, options);
   const png = await encodePng(image);
 
   if (!endsAtIend(png)) throw new VerificationError("trailing data after IEND");
-  const check = verifyBars(await decodePng(png), rects, color);
-  if (!check.ok)
-    throw new VerificationError(`${check.badPixels} pixels under the bars were not covered`);
-  return png;
+  const check = verify(await decodePng(png), marks, options, 0);
+  if (!check.ok) {
+    throw new VerificationError(`${check.badPixels} pixels under the marks were not as promised`);
+  }
+  return { bytes: png, hardened };
 }
 
 const JPEG_QUALITY = 0.92;
@@ -78,22 +127,33 @@ async function decodeImage(bytes: Uint8Array, type: string): Promise<Rgba> {
   }
 }
 
-// Lossy, so the bars are grown to whole blocks first and the check allows a small tolerance.
+// Lossy, so solid bars are grown to whole blocks first and the check allows a small tolerance.
+// Smudges are already smooth, so JPEG only needs the tolerance.
 export async function exportRedactedJpeg(
   source: ImageBitmap,
-  rects: Rect[],
-  color: BarColor,
-): Promise<Uint8Array> {
+  marks: Mark[],
+  options: ExportOptions,
+): Promise<Exported> {
   const image = bitmapToRgba(source);
-  const aligned = alignRects(rects, image.width, image.height);
-  paintBars(image, aligned, color);
+  const grown =
+    options.style === "smudge"
+      ? marks
+      : alignRects(
+          marks.map((m) => m.rect),
+          image.width,
+          image.height,
+        ).map((rect, i) => ({ rect, label: marks[i]?.label }));
+  renderMarks(image, grown, options.style, options.color);
+  const hardened = await harden(image, grown, options);
   const jpeg = await encodeJpeg(image);
 
   if (!endsAtEoi(jpeg)) throw new VerificationError("trailing data after the JPEG end marker");
-  const check = verifyBars(await decodeImage(jpeg, "image/jpeg"), rects, color, JPEG_TOLERANCE);
-  if (!check.ok)
-    throw new VerificationError(`${check.badPixels} pixels under the bars were not covered`);
-  return jpeg;
+  const decoded = await decodeImage(jpeg, "image/jpeg");
+  const check = verify(decoded, marks, options, JPEG_TOLERANCE);
+  if (!check.ok) {
+    throw new VerificationError(`${check.badPixels} pixels under the marks were not as promised`);
+  }
+  return { bytes: jpeg, hardened };
 }
 
 export function exportName(original: string, format: "png" | "jpeg" = "png"): string {
