@@ -2,7 +2,7 @@
   <img src="docs/banner.en.png" alt="SafeShot" width="100%">
 </p>
 
-<p align="center"><a href="README.md">Português</a> · <a href="../../releases">Download</a> · <a href="CONTRIBUTING.md">Contributing</a></p>
+<p align="center"><a href="README.md">Português</a> · <a href="../../releases">Download</a></p>
 
 <p align="center"><img alt="license MIT" src="https://img.shields.io/badge/license-MIT-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="platform Windows | macOS" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="100% offline" src="https://img.shields.io/badge/100%25-offline-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="built with Tauri 2" src="https://img.shields.io/badge/built%20with-Tauri%202-d19a00?style=flat-square&labelColor=1b1f27"></p>
 
@@ -75,7 +75,7 @@ It does not:
 
 ## Privacy
 
-Nothing leaves your computer: OCR runs locally (system reader or Tesseract, with files bundled in the app) and the webview security policy blocks external connections. No image is written to disk beyond the export you ask for, there is no history, and logs never hold recognized text. To report a detection or privacy problem, see [SECURITY.md](SECURITY.md).
+Nothing leaves your computer: OCR runs locally (system reader or Tesseract, with files bundled in the app) and the webview security policy blocks external connections. No image is written to disk beyond the export you ask for, there is no history, and logs never hold recognized text.
 
 ## Run locally
 
@@ -91,7 +91,7 @@ pnpm test
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+Issues and pull requests are welcome.
 
 ## License
 

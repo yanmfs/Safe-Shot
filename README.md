@@ -2,7 +2,7 @@
   <img src="docs/banner.png" alt="SafeShot" width="100%">
 </p>
 
-<p align="center"><a href="README.en.md">English</a> · <a href="../../releases">Download</a> · <a href="CONTRIBUTING.md">Contribuir</a></p>
+<p align="center"><a href="README.en.md">English</a> · <a href="../../releases">Download</a></p>
 
 <p align="center"><img alt="licença MIT" src="https://img.shields.io/badge/licen%C3%A7a-MIT-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="sistema Windows | macOS" src="https://img.shields.io/badge/sistema-Windows%20%7C%20macOS-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="100% offline" src="https://img.shields.io/badge/100%25-offline-d19a00?style=flat-square&labelColor=1b1f27"> <img alt="feito com Tauri 2" src="https://img.shields.io/badge/feito%20com-Tauri%202-d19a00?style=flat-square&labelColor=1b1f27"></p>
 
@@ -75,7 +75,7 @@ Não faz:
 
 ## Privacidade
 
-Nada sai do computador: o OCR roda localmente (leitor do sistema ou Tesseract, com arquivos empacotados no app) e a política de segurança do webview bloqueia conexões externas. Nenhuma imagem é gravada em disco além da exportação que você pede, não há histórico e os logs não guardam texto reconhecido. Para reportar uma falha de detecção ou de privacidade, veja o [SECURITY.md](SECURITY.md).
+Nada sai do computador: o OCR roda localmente (leitor do sistema ou Tesseract, com arquivos empacotados no app) e a política de segurança do webview bloqueia conexões externas. Nenhuma imagem é gravada em disco além da exportação que você pede, não há histórico e os logs não guardam texto reconhecido.
 
 ## Rodar localmente
 
@@ -91,7 +91,7 @@ pnpm test
 
 ## Contribuir
 
-Veja o [CONTRIBUTING.md](CONTRIBUTING.md).
+Issues e pull requests são bem-vindos.
 
 ## Licença
 
