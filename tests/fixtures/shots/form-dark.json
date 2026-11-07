@@ -1,0 +1,36 @@
+{
+  "expected": [
+    {
+      "category": "name",
+      "text": "Maria Oliveira Santos"
+    },
+    {
+      "category": "cpf",
+      "text": "205.910.665-64"
+    },
+    {
+      "category": "document",
+      "text": "12.345.678-9"
+    },
+    {
+      "category": "birthdate",
+      "text": "14/03/1991"
+    },
+    {
+      "category": "cep",
+      "text": "74110-130"
+    },
+    {
+      "category": "address",
+      "text": "Rua 5, Qd. 12, Lt. 3, Setor Oeste"
+    },
+    {
+      "category": "phone",
+      "text": "(62) 3333-4444"
+    },
+    {
+      "category": "email",
+      "text": "maria.santos@exemplo.com"
+    }
+  ]
+}

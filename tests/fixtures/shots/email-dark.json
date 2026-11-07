@@ -1,0 +1,12 @@
+{
+  "expected": [
+    {
+      "category": "email",
+      "text": "financeiro@empresa-exemplo.com.br"
+    },
+    {
+      "category": "phone",
+      "text": "(11) 98888-7777"
+    }
+  ]
+}
